@@ -3,8 +3,8 @@ Contributors: webdorado
 Donate link: https://web-dorado.com/products/wordpress-form.html
 Tags:  captcha, contact, contact form, contact forms, custom form, email, feedback, form, form builder, form manager, forms, survey
 Requires at least: 3.4
-Tested up to: 4.5
-Stable tag: 1.9.9
+Tested up to: 4.6
+Stable tag: 1.9.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -156,58 +156,7 @@ Upgrade to [WordPress Form Maker Pro](https://web-dorado.com/products/wordpress-
 *   Google Maps API Integration, possibility to use the maps in two different form fields of the Form Maker.     
 *   Possibility to include tax percentage within PayPal options for the localization of the payment.     
    
-	
-### Supported languages Of Form Maker  
-
- *If you need language of Form Maker which is not included in this list, please contact us and we will do the translation of Form Maker within 3 days. If you find any mistakes in the translation, please contact us and we will make relevant corrections within 3 days.*  
-
-Afrikaans (af)  
-Albanian (sq)  
-Arabic (ar)  
-Armenian (hy_AM)  
-Belarusian (be_BY)  
-Bulgarian (bg_BG)  
-Catalan (ca)  
-Chinese, Simplified (zh_CN)  
-Croatian (hr)  
-Czech (cs_CZ)  
-Danish (da_DK)  
-Dutch (nl_NL)  
-Esperanto (eo_EO)  
-Estonian (et)  
-Finnish (fi)  
-French (fr_FR)  
-Galician (gl_ES)  
-Georgian (ka_GE)  
-German (de_DE)  
-Greek (el)  
-Hebrew (he_IL)  
-Hindi (hi_IN)  
-Hungarian (hu_HU)  
-Indonesian (id_ID)  
-Italian (it_IT)  
-Japanese (ja)  
-Korean (ko_KR)  
-Latvian (lv)  
-Lithuanian (lt_LT)  
-Macedonian (mk_MK)  
-Malay (ms_MY)  
-Maltese (mt_MT)  
-Norwegian (nb_NO)  
-Persian (fa_IR)  
-Polish (pl_PL)  
-Portuguese (pt_PT)  
-Russian (ru_RU)  
-Romanian (ro_RO)  
-Serbian (sr_RS)  
-Slovak (sk_SK)  
-Spanish (es_ES)  
-Swedish (sv_SE)  
-Tamil (ta)  
-Thai (th)  
-Turkish (tr_TR)  
-Ukrainian (uk_UA)  
-Vietnamese (vi)  
+ *If you need language of Form Maker which is not included, please contact us and we will do the translation of Form Maker within 3 days. If you find any mistakes in the translation, please contact us and we will make relevant corrections within 3 days.*  
 
 == Installation ==    
 
@@ -365,6 +314,12 @@ Form Maker uses phone and number field types, which are verified and do not acce
 Email field should be used since it verifies that an entry format fulfills example@example.com format.
 
 == Changelog ==
+
+= 1.9.11 =
+Changed: Filters now apply to CSV and XML export   
+
+= 1.9.10 =
+Fixed: Bug on "Advanced Layout"   
 
 = 1.9.9 =
 Changed: Featured plugins page   

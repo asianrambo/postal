@@ -1,0 +1,1 @@
+[07-Sep-2016 15:55:05 America/Chicago] PHP Fatal error:  Class 'WP_Widget' not found in /home/administrator/public_html/wordpress/wp-content/plugins/form-maker/admin/controllers/FMControllerWidget.php on line 3

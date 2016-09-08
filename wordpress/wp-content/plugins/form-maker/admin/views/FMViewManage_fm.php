@@ -4352,7 +4352,7 @@ class FMViewManage_fm {
 					foreach($ids as $key => $id) {
 						if ($types[$key] != "type_section_break") {
 							?>
-							<button onClick="insertAtCursor_form('<?php echo $ids[$key]; ?>','<?php echo $labels[$key]; ?>')" class="fm_label_buttons" title="<?php echo $labels[$key]; ?>"><?php echo $labels[$key]; ?></button>
+							<button type="button" onClick="insertAtCursor_form('<?php echo $ids[$key]; ?>','<?php echo $labels[$key]; ?>')" class="fm_label_buttons" title="<?php echo $labels[$key]; ?>"><?php echo $labels[$key]; ?></button>
 							<?php
 						}
 					}

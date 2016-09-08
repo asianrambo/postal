@@ -82,9 +82,14 @@ class  FMViewSubmissions_fm {
 				max: <?php echo $subs_count; ?>
 			});
 			
+			var search_labels = [];
+			jQuery('td.submitid_fc a').each(function(index, value) {
+				search_labels.push(parseInt(jQuery(this).html()));
+			});
+			
 			jQuery.ajax({
 			    type: "POST",  
-				url:"<?php echo add_query_arg(array('form_id' => $form_id, 'send_header' => 0), admin_url('admin-ajax.php')); ?>&action=generete_"+type+"&limitstart="+limit,
+				url:"<?php echo add_query_arg(array('form_id' => $form_id, 'send_header' => 0), admin_url('admin-ajax.php')); ?>&action=generete_"+type+"&limitstart="+limit+"&search_labels="+search_labels.join(','),
 				beforeSend: function() {
 					if(<?php echo $subs_count; ?> >= 1000 )
 						jQuery('.fm_modal').show();
@@ -116,7 +121,7 @@ class  FMViewSubmissions_fm {
 						progressbarValue.css({
 							"color": '#444',
 						});
-						window.location = "<?php echo add_query_arg(array('form_id' => $form_id, 'send_header' => 1), admin_url('admin-ajax.php')); ?>&action=generete_"+type+"&limitstart="+limit;
+						window.location = "<?php echo add_query_arg(array('form_id' => $form_id, 'send_header' => 1), admin_url('admin-ajax.php')); ?>&action=generete_"+type+"&limitstart="+limit+"&search_labels="+search_labels.join(',');
 					}
 			    }
 			});
