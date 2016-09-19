@@ -1,2 +1,4 @@
 [07-Sep-2016 15:55:05 America/Chicago] PHP Fatal error:  Class 'WP_Widget' not found in /home/administrator/public_html/wordpress/wp-content/plugins/form-maker/admin/controllers/FMControllerWidget.php on line 3
 [08-Sep-2016 01:09:28 America/Chicago] PHP Fatal error:  Class 'WP_Widget' not found in /home/administrator/public_html/wordpress/wp-content/plugins/form-maker/admin/controllers/FMControllerWidget.php on line 3
+[11-Sep-2016 01:58:01 America/Chicago] PHP Fatal error:  Class 'WP_Widget' not found in /home/administrator/public_html/fluffypostie/wp-content/plugins/form-maker/admin/controllers/FMControllerWidget.php on line 3
+[11-Sep-2016 08:34:56 America/Chicago] PHP Fatal error:  Class 'WP_Widget' not found in /home/administrator/public_html/fluffypostie/wp-content/plugins/form-maker/admin/controllers/FMControllerWidget.php on line 3
