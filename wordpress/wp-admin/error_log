@@ -1,1 +1,5 @@
 [05-Sep-2016 09:11:09 UTC] WordPress database error Unknown column 'wp_' in 'field list' for query SELECT wp_
+[21-Sep-2016 00:58:48 UTC] PHP Warning:  array_diff(): Argument #1 is not an array in /home/administrator/public_html/fluffypostie/wp-content/plugins/meta-box/inc/field.php on line 319
+[21-Sep-2016 00:58:48 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/administrator/public_html/fluffypostie/wp-content/plugins/meta-box/inc/field.php on line 320
+[21-Sep-2016 00:58:48 UTC] PHP Warning:  array_diff(): Argument #2 is not an array in /home/administrator/public_html/fluffypostie/wp-content/plugins/meta-box/inc/field.php on line 324
+[21-Sep-2016 00:58:48 UTC] PHP Warning:  Invalid argument supplied for foreach() in /home/administrator/public_html/fluffypostie/wp-content/plugins/meta-box/inc/field.php on line 325
