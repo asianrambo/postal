@@ -4,7 +4,7 @@ Donate link: https://web-dorado.com/products/wordpress-form.html
 Tags:  captcha, contact, contact form, contact forms, custom form, email, feedback, form, form builder, form manager, forms, survey
 Requires at least: 3.4
 Tested up to: 4.6
-Stable tag: 1.9.11
+Stable tag: 1.9.16
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -314,6 +314,25 @@ Form Maker uses phone and number field types, which are verified and do not acce
 Email field should be used since it verifies that an entry format fulfills example@example.com format.
 
 == Changelog ==
+
+= 1.9.16 =
+Fixed: Bug with Hidden field in custom text in Email   
+Fixed: Bug on email verification custom post   
+Added: Field type in field edit page   
+
+= 1.9.15 =
+Added: Password Confirmation field   
+
+= 1.9.14 =
+Fixed: Bug on CSV and XML export   
+
+= 1.9.13 =
+Fixed: Bug on Field label position (Left/Top)   
+Fixed: JS error on IE 11 and Microsoft Edge   
+
+= 1.9.12 =
+Added: Email Confirmation field   
+Fixed: Bug on CSV and XML export   
 
 = 1.9.11 =
 Changed: Filters now apply to CSV and XML export   

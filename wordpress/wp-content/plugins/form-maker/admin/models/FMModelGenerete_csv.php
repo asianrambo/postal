@@ -25,7 +25,7 @@ class FMModelGenerete_csv {
 		$group_id_s = array();
 		$form_id = (int)$_REQUEST['form_id'];
 		$limitstart = (int)$_REQUEST['limitstart'];
-		$search_labels	= $_REQUEST['search_labels'];
+		$search_labels	= isset($_REQUEST['search_labels']) ? $_REQUEST['search_labels'] : '';
 
 		
 		$paypal_info_fields = array('currency', 'ord_last_modified', 'status', 'full_name', 'fax', 'mobile_phone', 'email', 'phone', 'address', 'paypal_info',  'ipn', 'tax', 'shipping');

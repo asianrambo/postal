@@ -268,7 +268,10 @@ class FMModelManage_fm {
             }
             case 'type_password': {
               $params_names = array('w_field_label_size', 'w_field_label_pos', 'w_size', 'w_required', 'w_unique', 'w_class');
-              $temp = $params;
+			  $temp = $params;
+			  if(strpos($temp, 'w_verification') > -1)
+				$params_names = array('w_field_label_size', 'w_field_label_pos', 'w_size', 'w_required', 'w_unique', 'w_class', 'w_verification', 'w_verification_label');
+              
               foreach ($params_names as $params_name) {
                 $temp = explode('*:*' . $params_name . '*:*', $temp);
                 $param[$params_name] = $temp[0];
@@ -281,9 +284,26 @@ class FMModelManage_fm {
                   $param['attributes'] = $param['attributes'] . ' add_' . $attr;
                 }
               }
-              $param['w_field_label_pos'] = ($param['w_field_label_pos'] == "left" ? "table-cell" : "block");	
-              $required_sym = ($param['w_required'] == "yes" ? " *" : "");	
-              $rep ='<div id="wdform_field'.$id.'" type="type_password" class="wdform_field" style="display: table-cell;">'.$arrows.'<div align="left" id="'.$id.'_label_sectionform_id_temp"  class="'.$param['w_class'].'" style="display: '.$param['w_field_label_pos'].'; width: '.$param['w_field_label_size'].'px;"><span id="'.$id.'_element_labelform_id_temp" class="label" style="vertical-align: top;">'.$label.'</span><span id="'.$id.'_required_elementform_id_temp" class="required" style="vertical-align: top;">'.$required_sym.'</span></div><div align="left" id="'.$id.'_element_sectionform_id_temp" class="'.$param['w_class'].'" style="display: '.$param['w_field_label_pos'].'"><input type="hidden" value="type_password" name="'.$id.'_typeform_id_temp" id="'.$id.'_typeform_id_temp"><input type="hidden" value="'.$param['w_required'].'" name="'.$id.'_requiredform_id_temp" id="'.$id.'_requiredform_id_temp"><input type="hidden" value="'.$param['w_unique'].'" name="'.$id.'_uniqueform_id_temp" id="'.$id.'_uniqueform_id_temp"><input type="password" id="'.$id.'_elementform_id_temp" name="'.$id.'_elementform_id_temp" style="width: '.$param['w_size'].'px;" '.$param['attributes'].' disabled /></div></div>';
+			  
+			  $param['w_field_label_pos'] = ($param['w_field_label_pos'] == "left" ? "table-cell" : "block");	
+              $required_sym = ($param['w_required'] == "yes" ? " *" : "");
+			  
+			  if(isset($param['w_verification']) && $param['w_verification'] == "yes"){
+				$display_label_confirm = $param['w_field_label_pos'];
+				$display_element_confirm = $param['w_field_label_pos'];
+			  }
+			  else{
+				$display_label_confirm = "none";
+				$display_element_confirm = "none";
+			  }
+
+			  $param['w_verification'] = isset($param['w_verification']) ? $param['w_verification'] : "no";
+			  $param['w_verification_label'] = isset($param['w_verification_label']) ? $param['w_verification_label'] : "Password confirmation:";
+			  
+			  $confirm_password ='<br><div align="left" id="'.$id.'_1_label_sectionform_id_temp" class="'.$param['w_class'].'" style="display: '.$display_label_confirm.'; width: '.$param['w_field_label_size'].'px;"><span id="'.$id.'_1_element_labelform_id_temp" class="label" style="vertical-align: top;">'.$param['w_verification_label'].'</span><span id="'.$id.'_required_elementform_id_temp" class="required" style="vertical-align: top;">'.$required_sym.'</span></div><div align="left" id="'.$id.'_1_element_sectionform_id_temp" class="'.$param['w_class'].'" style="display: '.$display_element_confirm.';"><input type="hidden" value="'.$param['w_verification'].'" name="'.$id.'_verification_id_temp" id="'.$id.'_verification_id_temp"><input type="text" class="input_deactive" id="'.$id.'_1_elementform_id_temp" name="'.$id.'_1_elementform_id_temp" style="width: '.$param['w_size'].'px;" '.$param['attributes'].' disabled /></div>';
+			  
+              	
+              $rep ='<div id="wdform_field'.$id.'" type="type_password" class="wdform_field" style="display: table-cell;">'.$arrows.'<div align="left" id="'.$id.'_label_sectionform_id_temp"  class="'.$param['w_class'].'" style="display: '.$param['w_field_label_pos'].'; width: '.$param['w_field_label_size'].'px;"><span id="'.$id.'_element_labelform_id_temp" class="label" style="vertical-align: top;">'.$label.'</span><span id="'.$id.'_required_elementform_id_temp" class="required" style="vertical-align: top;">'.$required_sym.'</span></div><div align="left" id="'.$id.'_element_sectionform_id_temp" class="'.$param['w_class'].'" style="display: '.$param['w_field_label_pos'].'"><input type="hidden" value="type_password" name="'.$id.'_typeform_id_temp" id="'.$id.'_typeform_id_temp"><input type="hidden" value="'.$param['w_required'].'" name="'.$id.'_requiredform_id_temp" id="'.$id.'_requiredform_id_temp"><input type="hidden" value="'.$param['w_unique'].'" name="'.$id.'_uniqueform_id_temp" id="'.$id.'_uniqueform_id_temp"><input type="password" id="'.$id.'_elementform_id_temp" name="'.$id.'_elementform_id_temp" style="width: '.$param['w_size'].'px;" '.$param['attributes'].' disabled /></div>'.$confirm_password.'</div>';
               break;
             }
             case 'type_textarea': {
@@ -454,6 +474,14 @@ class FMModelManage_fm {
               $temp=$params;
 			  if(strpos($temp, 'w_autofill') > -1)
 				$params_names=array('w_field_label_size','w_field_label_pos','w_size','w_first_val','w_title','w_required','w_unique', 'w_class', 'w_autofill');
+				
+			  if(strpos($temp, 'w_hide_label') > -1)
+				$params_names = array('w_field_label_size','w_field_label_pos', 'w_hide_label', 'w_size','w_first_val','w_title','w_required','w_unique', 'w_class', 'w_autofill');
+				
+			  if(strpos($temp, 'w_verification') > -1)
+				$params_names = array('w_field_label_size','w_field_label_pos', 'w_hide_label', 'w_size','w_first_val','w_title','w_required','w_unique', 'w_class', 'w_verification', 'w_verification_label', 'w_verification_placeholder', 'w_autofill');
+				
+				
               foreach($params_names as $params_name )
               {	
                 $temp=explode('*:*'.$params_name.'*:*',$temp);
@@ -468,15 +496,36 @@ class FMModelManage_fm {
                 foreach($attrs as $attr)
                   $param['attributes'] = $param['attributes'].' add_'.$attr;
               }
-
+ 
               $param['w_field_label_pos'] = ($param['w_field_label_pos']=="left" ? "table-cell" : "block");	
+			  $param['w_hide_label'] = (isset($param['w_hide_label']) ? $param['w_hide_label'] : "no");
+			  $display_label = $param['w_hide_label'] == "no" ? $param['w_field_label_pos'] : "none";	
+			  
               $input_active = ($param['w_first_val']==$param['w_title'] ? "input_deactive" : "input_active");	
               $required_sym = ($param['w_required']=="yes" ? " *" : "");	
 			  $param['w_autofill'] = isset($param['w_autofill']) ? $param['w_autofill'] : 'no';
 			
-              $rep ='<div id="wdform_field'.$id.'" type="type_submitter_mail" class="wdform_field" style="display: table-cell;">'.$arrows.'<div align="left" id="'.$id.'_label_sectionform_id_temp" class="'.$param['w_class'].'" style="display: '.$param['w_field_label_pos'].'; width: '.$param['w_field_label_size'].'px;"><span id="'.$id.'_element_labelform_id_temp" class="label" style="vertical-align: top;">'.$label.'</span><span id="'.$id.'_required_elementform_id_temp" class="required" style="vertical-align: top;">'.$required_sym.'</span></div><div align="left" id="'.$id.'_element_sectionform_id_temp" class="'.$param['w_class'].'" style="display: '.$param['w_field_label_pos'].';"><input type="hidden" value="type_submitter_mail" name="'.$id.'_typeform_id_temp" id="'.$id.'_typeform_id_temp"><input type="hidden" value="'.$param['w_required'].'" name="'.$id.'_requiredform_id_temp" id="'.$id.'_requiredform_id_temp"><input type="hidden" value="'.$param['w_unique'].'" name="'.$id.'_uniqueform_id_temp" id="'.$id.'_uniqueform_id_temp"><input type="hidden" value="'.$param['w_autofill'].'" name="'.$id.'_autofillform_id_temp" id="'.$id.'_autofillform_id_temp"><input type="text" class="'.$input_active.'" id="'.$id.'_elementform_id_temp" name="'.$id.'_elementform_id_temp" value="'.$param['w_first_val'].'" title="'.$param['w_title'].'" onfocus="delete_value(&quot;'.$id.'_elementform_id_temp&quot;)" onblur="return_value(&quot;'.$id.'_elementform_id_temp&quot;)" onchange="change_value(&quot;'.$id.'_elementform_id_temp&quot;)" style="width: '.$param['w_size'].'px;" '.$param['attributes'].' disabled /></div></div>';
+			  if(isset($param['w_verification']) && $param['w_verification'] == "yes"){
+				$display_label_confirm = $display_label;
+				$display_element_confirm = $param['w_field_label_pos'];
+			  }
+			  else{
+				$display_label_confirm = "none";
+				$display_element_confirm = "none";
+			  }
+				
+				$param['w_verification'] = isset($param['w_verification']) ? $param['w_verification'] : "no";
+				$param['w_verification_label'] = isset($param['w_verification_label']) ? $param['w_verification_label'] : "E-mail confirmation:";
+				$param['w_verification_placeholder'] = isset($param['w_verification_placeholder']) ? $param['w_verification_placeholder'] : "";
+			
+			
+			  $confirm_emeil = '<br><div align="left" id="'.$id.'_1_label_sectionform_id_temp" class="'.$param['w_class'].'" style="display: '.$display_label_confirm.'; width: '.$param['w_field_label_size'].'px;"><span id="'.$id.'_1_element_labelform_id_temp" class="label" style="vertical-align: top;">'.$param['w_verification_label'].'</span><span id="'.$id.'_required_elementform_id_temp" class="required" style="vertical-align: top;">'.$required_sym.'</span></div><div align="left" id="'.$id.'_1_element_sectionform_id_temp" class="'.$param['w_class'].'" style="display: '.$display_element_confirm.';"><input type="hidden" value="'.$param['w_verification'].'" name="'.$id.'_verification_id_temp" id="'.$id.'_verification_id_temp"><input type="text" class="input_deactive" id="'.$id.'_1_elementform_id_temp" name="'.$id.'_1_elementform_id_temp" value="'.$param['w_verification_placeholder'].'" title="'.$param['w_verification_placeholder'].'" onfocus="delete_value(&quot;'.$id.'_elementform_id_temp&quot;)" onblur="return_value(&quot;'.$id.'_elementform_id_temp&quot;)" onchange="change_value(&quot;'.$id.'_elementform_id_temp&quot;)" style="width: '.$param['w_size'].'px;" '.$param['attributes'].' disabled /></div>';
+			
+			
+              $rep ='<div id="wdform_field'.$id.'" type="type_submitter_mail" class="wdform_field" style="display: table-cell;">'.$arrows.'<div align="left" id="'.$id.'_label_sectionform_id_temp" class="'.$param['w_class'].'" style="display: '.$display_label.'; width: '.$param['w_field_label_size'].'px;"><span id="'.$id.'_element_labelform_id_temp" class="label" style="vertical-align: top;">'.$label.'</span><span id="'.$id.'_required_elementform_id_temp" class="required" style="vertical-align: top;">'.$required_sym.'</span></div><div align="left" id="'.$id.'_element_sectionform_id_temp" class="'.$param['w_class'].'" style="display: '.$param['w_field_label_pos'].';"><input type="hidden" value="type_submitter_mail" name="'.$id.'_typeform_id_temp" id="'.$id.'_typeform_id_temp"><input type="hidden" value="'.$param['w_required'].'" name="'.$id.'_requiredform_id_temp" id="'.$id.'_requiredform_id_temp"><input type="hidden" value="'.$param['w_hide_label'].'" name="'.$id.'_hide_labelform_id_temp" id="'.$id.'_hide_labelform_id_temp"/><input type="hidden" value="'.$param['w_unique'].'" name="'.$id.'_uniqueform_id_temp" id="'.$id.'_uniqueform_id_temp"><input type="hidden" value="'.$param['w_autofill'].'" name="'.$id.'_autofillform_id_temp" id="'.$id.'_autofillform_id_temp"><input type="hidden" value="'.$param['w_verification'].'" name="'.$id.'_verification_id_temp" id="'.$id.'_verification_id_temp"><input type="text" class="'.$input_active.'" id="'.$id.'_elementform_id_temp" name="'.$id.'_elementform_id_temp" value="'.$param['w_first_val'].'" title="'.$param['w_title'].'" onfocus="delete_value(&quot;'.$id.'_elementform_id_temp&quot;)" onblur="return_value(&quot;'.$id.'_elementform_id_temp&quot;)" onchange="change_value(&quot;'.$id.'_elementform_id_temp&quot;)" style="width: '.$param['w_size'].'px;" '.$param['attributes'].' disabled /></div>'.$confirm_emeil.'</div>';
               break;
             }
+			
             case 'type_checkbox':
             {
               $params_names=array('w_field_label_size','w_field_label_pos','w_flow','w_choices','w_choices_checked','w_rowcol', 'w_required','w_randomize','w_allow_other','w_allow_other_num','w_class');

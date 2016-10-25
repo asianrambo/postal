@@ -125,7 +125,7 @@ class FMViewForm_maker {
       }
       $form_theme = implode('{', $body_or_classes_implode);
 	  $form_theme = preg_replace($pattern, ' ', $form_theme);
-      $form_maker_front_end .= '<style>' . str_replace('[SITE_ROOT]', WD_FM_URL, $form_theme) . '</style>';
+      $form_maker_front_end .= '<style>#form' . $id . ' input[type="text"] {box-sizing: border-box;} ' . str_replace('[SITE_ROOT]', WD_FM_URL, $form_theme) . '</style>';
       wp_print_scripts('main' . (($old == false || ($old == true && $row->form=='')) ? '_div' : '') . '_front_end', WD_FM_URL . '/js/main' . (($old == false || ($old == true && $row->form=='')) ? '_div' : '') . '_front_end.js?ver='. get_option("wd_form_maker_version"));
       $form_currency = '$';
       $check_js = '';
@@ -1001,6 +1001,8 @@ class FMViewForm_maker {
       else {
         $form = $row->form_front;
       }
+	  $GLOBALS['map_include'] = false;
+	  
       foreach($id1s as $id1s_key => $id1) {
         $label=$labels[$id1s_key];
         $type=$types[$id1s_key];
@@ -1220,6 +1222,9 @@ class FMViewForm_maker {
             case 'type_password': {
               $params_names=array('w_field_label_size','w_field_label_pos','w_size','w_required','w_unique','w_class');
               $temp=$params;
+			  
+			  if(strpos($temp, 'w_verification') > -1)
+				$params_names = array('w_field_label_size', 'w_field_label_pos', 'w_size', 'w_required', 'w_unique', 'w_class', 'w_verification', 'w_verification_label');
               foreach($params_names as $params_name ) {
                 $temp=explode('*:*'.$params_name.'*:*',$temp);
                 $param[$params_name] = $temp[0];
@@ -1244,6 +1249,15 @@ class FMViewForm_maker {
               }
               $rep.='</div><div class="wdform-element-section '.$param['w_class'].'" style="'.$param['w_field_label_pos2'].' width: '.$param['w_size'].'px;"><input type="password" id="wdform_'.$id1.'_element'.$form_id.'" name="wdform_'.$id1.'_element'.$form_id.'" style="width: 100%;" '.$param['attributes'].'></div></div>';
               
+			  if(isset($param['w_verification']) && $param['w_verification'] == "yes"){
+				$rep .='<div><div type="type_password" class="wdform-field"  style="width:'.$wdformfieldsize.'px"><div class="wdform-label-section" style="'.$param['w_field_label_pos1'].'; width: '.$param['w_field_label_size'].'px;"><span class="wdform-label">'.$param['w_verification_label'].'</span>';
+				if($required) {
+					$rep.='<span class="wdform-required">'.$required_sym.'</span>';
+				}
+				$rep.='</div><div class="wdform-element-section '.$param['w_class'].'" style="'.$param['w_field_label_pos2'].' width: '.$param['w_size'].'px;"><input  type="password"  id="wdform_'.$id1.'_1_element'.$form_id.'" name="wdform_'.$id1.'_1_element'.$form_id.'" style="width: 100%;" '.$param['attributes'].'></div></div></div>';
+			  }
+			  
+			  
               if($required) {
                 $check_js.='
                 if(x.find(jQuery("div[wdid='.$id1.']")).length != 0 && x.find(jQuery("div[wdid='.$id1.']")).css("display") != "none")
@@ -1261,6 +1275,25 @@ class FMViewForm_maker {
                 }
                 ';
               }
+			  
+			   if(isset($param['w_verification']) && $param['w_verification'] == "yes") {
+                $check_js.='
+                if(x.find(jQuery("div[wdid='.$id1.']")).length != 0 && x.find(jQuery("div[wdid='.$id1.']")).css("display") != "none")
+                {
+                  if(jQuery("#wdform_'.$id1.'_element'.$form_id.'").val() !== jQuery("#wdform_'.$id1.'_1_element'.$form_id.'").val())
+                  {
+                    alert("' .addslashes(__('Password confirmation does not match the password', 'form_maker')) . '");
+                    jQuery("#wdform_'.$id1.'_element'.$form_id.'").addClass( "form-error" );
+                    old_bg=x.find(jQuery("div[wdid='.$id1.']")).css("background-color");
+                    x.find(jQuery("div[wdid='.$id1.']")).effect( "shake", {}, 500 ).css("background-color","#FF8F8B").animate({backgroundColor: old_bg}, {duration: 500, queue: false });
+                    jQuery("#wdform_'.$id1.'_element'.$form_id.'").focus();
+                    jQuery("#wdform_'.$id1.'_element'.$form_id.'").change(function() { if( jQuery(this).val()!="" ) jQuery(this).removeClass("form-error"); else jQuery(this).addClass("form-error");});
+                    return false;
+                  }
+                }
+                ';
+              }
+			  
               break;
             }
 
@@ -1697,6 +1730,13 @@ class FMViewForm_maker {
               $temp=$params;
 			  if(strpos($temp, 'w_autofill') > -1)
 				$params_names=array('w_field_label_size','w_field_label_pos','w_size','w_first_val','w_title','w_required','w_unique', 'w_class', 'w_autofill');
+				
+			  if(strpos($temp, 'w_hide_label') > -1)
+				$params_names=array('w_field_label_size','w_field_label_pos', 'w_hide_label', 'w_size','w_first_val','w_title','w_required','w_unique', 'w_class', 'w_autofill');
+				
+			  if(strpos($temp, 'w_verification') > -1)
+				$params_names = array('w_field_label_size','w_field_label_pos', 'w_hide_label', 'w_size','w_first_val','w_title','w_required','w_unique', 'w_class', 'w_verification', 'w_verification_label', 'w_verification_placeholder', 'w_autofill');	
+				
               foreach($params_names as $params_name ) {
                 $temp=explode('*:*'.$params_name.'*:*',$temp);
                 $param[$params_name] = $temp[0];
@@ -1710,9 +1750,15 @@ class FMViewForm_maker {
                 }
               }
    
+
+   
               $wdformfieldsize = ($param['w_field_label_pos']=="left" ? ($param['w_field_label_size']+$param['w_size']) : max($param['w_field_label_size'], $param['w_size']));	
               $param['w_field_label_pos1'] = ($param['w_field_label_pos']=="left" ? "float: left;" : "");	
               $param['w_field_label_pos2'] = ($param['w_field_label_pos']=="left" ? "" : "display:block;");
+			  $param['w_hide_label'] = (isset($param['w_hide_label']) ? $param['w_hide_label'] : "no");
+			  if($param['w_hide_label'] == "yes")  
+				$param['w_field_label_pos1'] = "display:none;";
+			  
               $required = ($param['w_required']=="yes" ? true : false);	
               $param['w_autofill'] = isset($param['w_autofill']) ? $param['w_autofill'] : 'no';
 			  if($param['w_autofill'] == 'yes' && $wp_useremail){
@@ -1729,6 +1775,14 @@ class FMViewForm_maker {
                 $rep.='<span class="wdform-required">'.$required_sym.'</span>';
               }
               $rep.='</div><div class="wdform-element-section '.$param['w_class'].'" style="'.$param['w_field_label_pos2'].' width: '.$param['w_size'].'px;"><input type="text" class="'.$input_active.'" id="wdform_'.$id1.'_element'.$form_id.'" name="wdform_'.$id1.'_element'.$form_id.'" value="'.$param['w_first_val'].'" title="'.$param['w_title'].'"  style="width: 100%;" '.$param['attributes'].'></div></div>';
+			  
+			  if(isset($param['w_verification']) && $param['w_verification'] == "yes"){
+				$rep .='<div><div type="type_submitter_mail" class="wdform-field"  style="width:'.$wdformfieldsize.'px"><div class="wdform-label-section" style="'.$param['w_field_label_pos1'].'; width: '.$param['w_field_label_size'].'px;"><span class="wdform-label">'.$param['w_verification_label'].'</span>';
+				if($required) {
+					$rep.='<span class="wdform-required">'.$required_sym.'</span>';
+				}
+				$rep.='</div><div class="wdform-element-section '.$param['w_class'].'" style="'.$param['w_field_label_pos2'].' width: '.$param['w_size'].'px;"><input type="text" class="'.$input_active.'" id="wdform_'.$id1.'_1_element'.$form_id.'" name="wdform_'.$id1.'_1_element'.$form_id.'" value="'.$param['w_verification_placeholder'].'" title="'.$param['w_verification_placeholder'].'"  style="width: 100%;" '.$param['attributes'].'></div></div></div>';
+			  }
               
               if($required) {
                 $check_js.='
@@ -1751,7 +1805,7 @@ class FMViewForm_maker {
               if(x.find(jQuery("div[wdid='.$id1.']")).length != 0 && x.find(jQuery("div[wdid='.$id1.']")).css("display") != "none")
               {
               
-              if(jQuery("#wdform_'.$id1.'_element'.$form_id.'").val()!="" && jQuery("#wdform_'.$id1.'_element'.$form_id.'").val().search(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/) == -1 )
+              if(jQuery("#wdform_'.$id1.'_element'.$form_id.'").val()!="" && jQuery("#wdform_'.$id1.'_element'.$form_id.'").val().search(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/) == -1  && jQuery("#wdform_'.$id1.'_element'.$form_id.'").attr("title") != jQuery("#wdform_'.$id1.'_element'.$form_id.'").val())
                 {
                   alert("' . addslashes(__("This is not a valid email address.", 'form_maker')) . '");
                   old_bg=x.find(jQuery("div[wdid='.$id1.']")).css("background-color");
@@ -1761,7 +1815,24 @@ class FMViewForm_maker {
                 }
               
               }
-              ';		
+              ';
+			  if(isset($param['w_verification']) && $param['w_verification'] == "yes") {
+                $check_js.='
+                if(x.find(jQuery("div[wdid='.$id1.']")).length != 0 && x.find(jQuery("div[wdid='.$id1.']")).css("display") != "none")
+                {
+                  if((jQuery("#wdform_'.$id1.'_element'.$form_id.'").val() !== jQuery("#wdform_'.$id1.'_1_element'.$form_id.'").val() && jQuery("#wdform_'.$id1.'_1_element'.$form_id.'").attr("title") != jQuery("#wdform_'.$id1.'_1_element'.$form_id.'").val()) ||(jQuery("#wdform_'.$id1.'_element'.$form_id.'").val() !=jQuery("#wdform_'.$id1.'_element'.$form_id.'").attr("title") && jQuery("#wdform_'.$id1.'_1_element'.$form_id.'").attr("title") == jQuery("#wdform_'.$id1.'_1_element'.$form_id.'").val()))
+                  {
+                    alert("' .addslashes(__('The Confirmation Email must match your Email Address', 'form_maker')) . '");
+                    jQuery("#wdform_'.$id1.'_element'.$form_id.'").addClass( "form-error" );
+                    old_bg=x.find(jQuery("div[wdid='.$id1.']")).css("background-color");
+                    x.find(jQuery("div[wdid='.$id1.']")).effect( "shake", {}, 500 ).css("background-color","#FF8F8B").animate({backgroundColor: old_bg}, {duration: 500, queue: false });
+                    jQuery("#wdform_'.$id1.'_element'.$form_id.'").focus();
+                    jQuery("#wdform_'.$id1.'_element'.$form_id.'").change(function() { if( jQuery(this).val()!="" ) jQuery(this).removeClass("form-error"); else jQuery(this).addClass("form-error");});
+                    return false;
+                  }
+                }
+                ';
+              }
               
               break;
             }
@@ -3115,6 +3186,14 @@ class FMViewForm_maker {
             }
 
             case 'type_mark_map': {
+			
+			    if($GLOBALS['map_include'] === false){
+					$fm_settings = get_option('fm_settings');
+					$map_key = isset($fm_settings['map_key']) ? $fm_settings['map_key'] : '';
+					wp_enqueue_script('gmap_form_api', 'https://maps.google.com/maps/api/js?v=3.exp&key='.$map_key);
+					$GLOBALS['map_include'] = true;
+			    }
+			
               $params_names=array('w_field_label_size','w_field_label_pos','w_center_x','w_center_y','w_long','w_lat','w_zoom','w_width','w_height','w_info','w_class');
               $temp=$params;
               foreach($params_names as $params_name ) {
@@ -3143,6 +3222,13 @@ class FMViewForm_maker {
             }
             
             case 'type_map': {
+			
+			    if($GLOBALS['map_include'] === false){
+					$fm_settings = get_option('fm_settings');
+					$map_key = isset($fm_settings['map_key']) ? $fm_settings['map_key'] : '';
+					wp_enqueue_script('gmap_form_api', 'https://maps.google.com/maps/api/js?v=3.exp&key='.$map_key);
+					$GLOBALS['map_include'] = true;
+				}
               $params_names=array('w_center_x','w_center_y','w_long','w_lat','w_zoom','w_width','w_height','w_info','w_class');
               $temp=$params;
 

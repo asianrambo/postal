@@ -3,7 +3,7 @@
  * Plugin Name: Form Maker
  * Plugin URI: https://web-dorado.com/products/form-maker-wordpress.html
  * Description: This plugin is a modern and advanced tool for easy and fast creating of a WordPress Form. The backend interface is intuitive and user friendly which allows users far from scripting and programming to create WordPress Forms.
- * Version: 1.9.11
+ * Version: 1.9.16
  * Author: WebDorado
  * Author URI: https://web-dorado.com/
  * License: GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
@@ -272,7 +272,7 @@ function register_fmemailverification_cpt(){
 // Activate plugin.
 function form_maker_activate() {
   $version = get_option("wd_form_maker_version");
-  $new_version = '1.9.11';
+  $new_version = '1.9.16';
   global $wpdb;
   if (!$version) {
 	add_option("wd_form_maker_version", $new_version, '', 'no');
@@ -374,7 +374,9 @@ function form_maker_manage_scripts() {
   wp_enqueue_script('jquery-ui-datepicker');
 
   // wp_enqueue_script('mootools', WD_FM_URL . '/js/mootools.js', array(), '1.12');
-  wp_enqueue_script('gmap_form_api', 'https://maps.google.com/maps/api/js?v=3.exp&key='.$map_key);
+  if($_GET['page'] == 'manage_fm'){
+	wp_enqueue_script('gmap_form_api', 'https://maps.google.com/maps/api/js?v=3.exp&key='.$map_key);
+  }
   wp_enqueue_script('gmap_form', WD_FM_URL . '/js/if_gmap_back_end.js');
 
   wp_enqueue_script('form_maker_admin', WD_FM_URL . '/js/form_maker_admin.js', array(), get_option("wd_form_maker_version"));
@@ -457,8 +459,6 @@ function form_maker_generate_action() {
 add_filter('wp_head', 'form_maker_generate_action', 10000);
 
 function form_maker_front_end_scripts() {
-	$fm_settings = get_option('fm_settings');
-    $map_key = isset($fm_settings['map_key']) ? $fm_settings['map_key'] : '';
   // global $wp_scripts;
   // if (isset($wp_scripts->registered['jquery'])) {
     // $jquery = $wp_scripts->registered['jquery'];
@@ -478,7 +478,6 @@ function form_maker_front_end_scripts() {
   wp_enqueue_style('jquery-ui-spinner', WD_FM_URL . '/css/jquery-ui-spinner.css');
 
   // wp_enqueue_script('mootools', WD_FM_URL . '/js/mootools.js', array(), '1.12');
-  wp_enqueue_script('gmap_form_api', 'https://maps.google.com/maps/api/js?v=3.exp&key='.$map_key);
   wp_enqueue_script('gmap_form', WD_FM_URL . '/js/if_gmap_front_end.js');
   wp_enqueue_script('jelly.min', WD_FM_URL . '/js/jelly.min.js');
   wp_enqueue_script('file-upload', WD_FM_URL . '/js/file-upload.js');

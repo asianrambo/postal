@@ -60,7 +60,7 @@ class FMModelSubmissions_fm {
     $join_where = array();
     $rows_ord = array();
     $join = '';
-    for ($i = 0; $i < 8; $i++) {
+    for ($i = 0; $i < 9; $i++) {
       array_push($labels_parameters, NULL);
     }
     $sorted_label_names = array();
@@ -115,7 +115,7 @@ class FMModelSubmissions_fm {
       $orderby = "";
     }
 		if ($form_id) {
-      for($i = 0; $i < 8; $i++) {
+      for($i = 0; $i < 9; $i++) {
         array_pop($labels_parameters);
       }
       $query = "SELECT distinct element_label FROM " . $wpdb->prefix . "formmaker_submits WHERE ". $where;
@@ -221,6 +221,14 @@ class FMModelSubmissions_fm {
       for ($i = 0; $i < count($results); $i++) {
         array_push($rows_ord, $results[$i]->group_id); 
       }
+	  
+	  $query1 = $join . ' ' . $orderby ;
+      $searched_group_ids = $wpdb->get_results($query1);
+	  $searched_ids = array();
+	  for ($i = 0; $i < count($searched_group_ids); $i++) {
+        array_push($searched_ids, $searched_group_ids[$i]->group_id); 
+      }
+	  
       $where2 = array();
       $where2[] = "group_id='0'";
       foreach ($rows_ord as $rows_ordd) { 
@@ -241,6 +249,7 @@ class FMModelSubmissions_fm {
       array_push($labels_parameters, $rows);
       array_push($labels_parameters, $group_ids);
       array_push($labels_parameters, $where_choices);
+      array_push($labels_parameters, $searched_ids);
     }
     return $labels_parameters;
   }

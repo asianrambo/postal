@@ -756,6 +756,50 @@ var form_id_temp = jQuery("#current_id").val() > 0 ? jQuery("#current_id").val()
 	}
 }
 
+function set_fieldtype(type){
+	var ObjectTypeField ={
+		type_text : 'Text Input -> Simple text',
+		type_password : 'Text Input -> Password',
+		type_textarea : 'Text Input -> Text area',
+		type_name : 'Text Input -> Name',
+		type_address : 'Text Input -> Address',
+		type_mark_map : 'Text Input -> Address(mark on map)',
+		type_submitter_mail : 'Text Input -> E-mail',
+		type_send_copy : 'Text Input -> Send copy to submitter',
+		type_phone : 'Text Input -> Phone',
+		type_number : 'Text Input -> Number',
+		type_hidden : 'Text Input -> Hidden field',
+		type_checkbox : 'Multiple Choice',
+		type_radio : 'Single Choice',
+		type_star_rating : 'Survey Tools -> Star Rating',
+		type_scale_rating : 'Survey Tools -> Scale Rating',
+		type_spinner : 'Survey Tools -> Spinner',
+		type_slider : 'Survey Tools -> Slider',
+		type_range : 'Survey Tools -> Range',
+		type_grading : 'Survey Tools -> Grading',
+		type_matrix : 'Survey Tools -> Matrix',
+		type_date_new : 'Time and Date -> Date (Single fileld with a picker)',
+		type_date_range : 'Time and Date -> Date range(Single filelds with a picker)',
+		type_date_fields : 'Time and Date -> Date (3 separate fields)',
+		type_time : 'Time and Date -> Time',
+		type_own_select : 'Select Box -> Custom Select',
+		type_country : 'Select Box -> Country List',
+		type_file_upload : 'File Upload',
+		type_map : 'Map',
+		type_paypal_price_new : 'Payment -> Amount (Price)',
+		type_paypal_select : 'Payment -> Select',
+		type_paypal_checkbox : 'Payment -> Checkbox',
+		type_paypal_radio : 'Payment -> Radio',
+		type_paypal_shipping : 'Payment -> Shipping',
+		type_paypal_total : 'Payment -> Total',
+		type_captcha : 'Captcha -> Simple Captcha',
+		type_arithmetic_captcha : 'Captcha -> Arithmetic Captcha',
+		type_recaptcha : 'Captcha -> Recaptcha',
+		type_submit_reset : 'Button -> Submit and Reset',
+		type_button : 'Button -> Custom'
+	}
+	jQuery("#edit_main_table tr:first").before( "<tr class='fm-field-label'><td>Field type</td><td>" + ObjectTypeField[type] + "</td></tr>" );
+}
 
 function refresh_id_name(i, type)
 {
@@ -1103,17 +1147,19 @@ function change_class(x,id)
 	document.getElementById(id+'_element_sectionform_id_temp').setAttribute("class",x);
 }
 
-function set_required(id)
+function set_required(id, type)
 {	
 	if(document.getElementById(id+"form_id_temp").value=="yes")
 	{
 		document.getElementById(id+"form_id_temp").setAttribute("value", "no");
 		document.getElementById(id+"_elementform_id_temp").innerHTML="";
+		document.getElementById(type+"_elementform_id_temp").innerHTML="";
 	}	
 	else
 	{
 		document.getElementById(id+"form_id_temp").setAttribute("value", "yes")
 		document.getElementById(id+"_elementform_id_temp").innerHTML=" *";
+		document.getElementById(type+"_elementform_id_temp").innerHTML=" *";
 	}
 }
 
@@ -2011,11 +2057,51 @@ function check_isspacebar(e)
 	return true;
 }
 
-function change_w_style(id, w)
+function change_w_style(id, w, type)
 {
-	if(document.getElementById(id))
-	document.getElementById(id).style.width=w+"px";
+
+	if(document.getElementById(id)){
+			document.getElementById(id).style.width=w+"px";
+	}
+	if(type)
+		document.getElementById(type).style.width=w+"px";
 }
+
+function verification_mail(id){
+	if(document.getElementById("el_verification_mail").checked){
+		document.getElementById('confirm_validation_label').style.display = "table-row";
+		document.getElementById('confirm_validation_empty').style.display = "table-row";
+		document.getElementById(id + "_verification_id_temp").value = "yes";
+		document.getElementById(id + "_1_label_sectionform_id_temp").style.display = document.getElementById(id + "_label_sectionform_id_temp").style.display;
+		document.getElementById(id + "_1_element_sectionform_id_temp").style.display = document.getElementById(id + "_element_sectionform_id_temp").style.display;
+		
+	}	
+	else{
+		document.getElementById('confirm_validation_label').style.display = "none";
+		document.getElementById('confirm_validation_empty').style.display = "none";
+		document.getElementById(id + "_verification_id_temp").value = "no";
+		document.getElementById(id + "_1_label_sectionform_id_temp").style.display = "none";
+		document.getElementById(id + "_1_element_sectionform_id_temp").style.display = "none";
+	}	
+}
+
+function verification_password(id){
+	if(document.getElementById("el_verification_password").checked){
+		document.getElementById('confirm_validation_label').style.display = "table-row";
+		document.getElementById(id + "_verification_id_temp").value = "yes";
+		document.getElementById(id + "_1_label_sectionform_id_temp").style.display = document.getElementById(id + "_label_sectionform_id_temp").style.display;
+		document.getElementById(id + "_1_element_sectionform_id_temp").style.display = document.getElementById(id + "_element_sectionform_id_temp").style.display;
+		
+	}	
+	else{
+		document.getElementById('confirm_validation_label').style.display = "none";
+		document.getElementById(id + "_verification_id_temp").value = "no";
+		document.getElementById(id + "_1_label_sectionform_id_temp").style.display = "none";
+		document.getElementById(id + "_1_element_sectionform_id_temp").style.display = "none";
+	}
+
+}
+
 
 function change_w_label(id, w)
 {
@@ -2623,14 +2709,40 @@ function check_year1(e, id)
 
 function label_top(num)
 {	
-	document.getElementById(num+'_label_sectionform_id_temp').style.display="block";
-	document.getElementById(num+'_element_sectionform_id_temp').style.display="block";
+
+	
+		document.getElementById(num+'_label_sectionform_id_temp').style.display="block";
+		document.getElementById(num+'_element_sectionform_id_temp').style.display="block";
+		
+		if(document.getElementById(num+'_1_label_sectionform_id_temp')){
+			if(document.getElementById(num+'_verification_id_temp').value == "yes"){
+				document.getElementById(num+'_1_label_sectionform_id_temp').style.display=document.getElementById(num+'_label_sectionform_id_temp').style.display;
+				document.getElementById(num+'_1_element_sectionform_id_temp').style.display=document.getElementById(num+'_element_sectionform_id_temp').style.display;
+			}
+			else{
+				document.getElementById(num+'_1_label_sectionform_id_temp').style.display="none";
+				document.getElementById(num+'_1_element_sectionform_id_temp').style.display="none";
+			}
+		}
+	
 }
 
 function label_left(num)
 {
-	document.getElementById(num+'_label_sectionform_id_temp').style.display="table-cell";
-	document.getElementById(num+'_element_sectionform_id_temp').style.display="table-cell";
+	
+		document.getElementById(num+'_label_sectionform_id_temp').style.display="table-cell";
+		document.getElementById(num+'_element_sectionform_id_temp').style.display="table-cell";
+		if(document.getElementById(num+'_1_label_sectionform_id_temp')){
+			if(document.getElementById(num+'_verification_id_temp').value == "yes"){
+				document.getElementById(num+'_1_label_sectionform_id_temp').style.display=document.getElementById(num+'_label_sectionform_id_temp').style.display;
+				document.getElementById(num+'_1_element_sectionform_id_temp').style.display=document.getElementById(num+'_element_sectionform_id_temp').style.display;
+			}
+			else{
+				document.getElementById(num+'_1_label_sectionform_id_temp').style.display="none";
+				document.getElementById(num+'_1_element_sectionform_id_temp').style.display="none";
+			}
+		}
+
 }
 
 function delete_value(id)
@@ -3028,10 +3140,17 @@ function close_window() {
 	}
 }
 
-function change_label(id, label) {
-  label = label.replace(/(<([^>]+)>)/ig, "");
-	document.getElementById(id).innerHTML = label;
-	document.getElementById(id).value = label;
+function change_label(id, label, type) {
+	if(!type){
+		label = label.replace(/(<([^>]+)>)/ig, "");
+		document.getElementById(id).innerHTML = label;
+		document.getElementById(id).value = label;
+	}
+	else{
+		label = label.replace(/(<([^>]+)>)/ig, "");
+		document.getElementById(type).innerHTML = label;
+	}
+	
 }
 
 function change_label_name(num, id, label, type)
@@ -4751,6 +4870,7 @@ function type_submit_reset(i, w_submit_title , w_reset_title , w_class, w_act, w
 	edit_div.appendChild(edit_main_table);
 	
 	t.appendChild(edit_div);
+	set_fieldtype('type_submit_reset');
 	
 	var adding_type = document.createElement("input");
 		adding_type.setAttribute("type", "hidden");
@@ -5008,7 +5128,7 @@ function type_hidden(i, w_name, w_value, w_attr_name, w_attr_value){
 	edit_div.appendChild(edit_main_table);
 	
 	t.appendChild(edit_div);
-	
+	set_fieldtype("type_hidden");
 	element='input';	type='hidden';  
 	var adding_type = document.createElement("input");
 		adding_type.setAttribute("type", "hidden");
@@ -5350,7 +5470,7 @@ function type_button(i, w_title , w_func , w_class, w_attr_name, w_attr_value){
 	edit_div.appendChild(edit_main_table);
 	
 	t.appendChild(edit_div);
-	
+	set_fieldtype('type_button');
 //show table
 
 	element='button';	type='button'; 
@@ -5658,7 +5778,7 @@ function type_send_copy(i, w_field_label, w_field_label_size, w_field_label_pos,
 	
 	t.appendChild(edit_div);
 	add_id_and_name(i, 'type_text');
-	
+	set_fieldtype('type_send_copy');
 //show table
 
 	element='input';	type='checkbox'; 
@@ -6236,7 +6356,7 @@ function type_text(i, w_field_label, w_field_label_size, w_field_label_pos,  w_s
 	
 	t.appendChild(edit_div);
 	add_id_and_name(i, 'type_text');
-	
+	set_fieldtype("type_text");
 //show table
 
 	element='input';	type='text'; 
@@ -6719,7 +6839,7 @@ function type_number(i, w_field_label, w_field_label_size, w_field_label_pos, w_
 	
 	t.appendChild(edit_div);
 	add_id_and_name(i, 'type_text');
-	
+	set_fieldtype('type_number');
 //show table
 
 	element='input';	type='text'; 
@@ -6817,7 +6937,7 @@ function type_number(i, w_field_label, w_field_label_size, w_field_label_pos, w_
 		refresh_attr(i, 'type_text');
 }
 
-function type_password(i, w_field_label, w_field_label_size, w_field_label_pos, w_size, w_required, w_unique, w_class, w_attr_name, w_attr_value) {
+function type_password(i, w_field_label, w_field_label_size, w_field_label_pos, w_size, w_required, w_unique, w_class, w_verification, w_verification_label, w_attr_name, w_attr_value) {
 
     document.getElementById("element_type").value="type_password";
 	delete_last_child();
@@ -6838,6 +6958,11 @@ function type_password(i, w_field_label, w_field_label_size, w_field_label_pos, 
 	var edit_main_tr6  = document.createElement('tr');
 	var edit_main_tr7  = document.createElement('tr');
 	var edit_main_tr8  = document.createElement('tr');
+	var edit_main_tr9  = document.createElement('tr');
+	var display_confirm = w_verification == "yes" ? "table-row" : "none";
+	var edit_main_tr10 = document.createElement('tr');
+		edit_main_tr10.setAttribute("id", "confirm_validation_label");
+		edit_main_tr10.style.display=display_confirm;
 	var edit_main_td1 = document.createElement('td');
 	var edit_main_td1_1 = document.createElement('td');
 	var edit_main_td2 = document.createElement('td');
@@ -6854,7 +6979,11 @@ function type_password(i, w_field_label, w_field_label_size, w_field_label_pos, 
 	var edit_main_td7_1 = document.createElement('td');
 	var edit_main_td8 = document.createElement('td');
 	var edit_main_td8_1 = document.createElement('td');
-
+	var edit_main_td10 = document.createElement('td');
+	var edit_main_td10_1 = document.createElement('td');
+	var edit_main_td9 = document.createElement('td');
+	var edit_main_td9_1 = document.createElement('td');
+	
 	var el_label_label = document.createElement('label');
 		el_label_label.setAttribute("class", "fm-field-label");
 		el_label_label.setAttribute("for", "edit_for_label");
@@ -6864,8 +6993,34 @@ function type_password(i, w_field_label, w_field_label_size, w_field_label_pos, 
         el_label_textarea.setAttribute("id", "edit_for_label");
         el_label_textarea.setAttribute("rows", "4");
         
-        el_label_textarea.setAttribute("onKeyUp", "change_label('"+i+"_element_labelform_id_temp', this.value)");
+        el_label_textarea.setAttribute("onKeyUp", "change_label('"+i+"_element_labelform_id_temp', this.value), '"+i+"_1_element_labelform_id_temp'");
 		el_label_textarea.innerHTML = w_field_label;
+	
+	var el_password_confirm_label = document.createElement('label');
+		el_password_confirm_label.setAttribute("class", "fm-field-label");
+		el_password_confirm_label.setAttribute("for", "el_verification_password");
+		el_password_confirm_label.innerHTML = "Password Confirmation"
+
+	var el_password_confirm = document.createElement('input');
+		el_password_confirm.setAttribute("id", "el_verification_password");
+		el_password_confirm.setAttribute("type", "checkbox");
+		el_password_confirm.setAttribute("onclick", "verification_password('"+i+"')");
+	if(w_verification=="yes")
+		el_password_confirm.setAttribute("checked", "checked");
+	
+	
+	var el_verification_label_label = document.createElement('label');
+		el_verification_label_label.setAttribute("class", "fm-field-label");
+		el_verification_label_label.setAttribute("for", "edit_for_label");
+		el_verification_label_label.innerHTML = "Field label confirmation";
+	
+	var el_verification_label_textarea = document.createElement('textarea');
+		el_verification_label_textarea.setAttribute("id", "edit_for_label");
+		el_verification_label_textarea.setAttribute("rows", "4");
+		el_verification_label_textarea.setAttribute("onKeyUp", "change_label('"+i+"_element_labelform_id_temp', this.value, '"+i+"_1_element_labelform_id_temp')");
+		el_verification_label_textarea.innerHTML = w_verification_label;
+	
+	
 	
 	var el_label_size_label = document.createElement('label');
 		el_label_size_label.setAttribute("class", "fm-field-label");
@@ -6877,7 +7032,7 @@ function type_password(i, w_field_label, w_field_label_size, w_field_label_pos, 
 	    el_label_size.setAttribute("type", "text");
 	    el_label_size.setAttribute("value", w_field_label_size);
 		el_label_size.setAttribute("onKeyPress", "return check_isnum(event)");
-        el_label_size.setAttribute("onKeyUp", "change_w_style('"+i+"_label_sectionform_id_temp', this.value)");
+        el_label_size.setAttribute("onKeyUp", "change_w_style('"+i+"_label_sectionform_id_temp', this.value, '"+i+"_1_label_sectionform_id_temp')");
 		
 		
 	var el_label_position_label = document.createElement('label');
@@ -6919,7 +7074,7 @@ function type_password(i, w_field_label, w_field_label_size, w_field_label_pos, 
 		el_size.setAttribute("type", "text");
 		el_size.setAttribute("value", w_size);
 		el_size.setAttribute("onKeyPress", "return check_isnum(event)");
-        el_size.setAttribute("onKeyUp", "change_w_style('"+i+"_elementform_id_temp', this.value)");
+        el_size.setAttribute("onKeyUp", "change_w_style('"+i+"_elementform_id_temp', this.value, '"+i+"_1_elementform_id_temp')");
 
 	var el_required_label = document.createElement('label');
 		el_required_label.setAttribute("class", "fm-field-label");
@@ -6929,7 +7084,7 @@ function type_password(i, w_field_label, w_field_label_size, w_field_label_pos, 
 	var el_required = document.createElement('input');
         el_required.setAttribute("id", "el_required");
         el_required.setAttribute("type", "checkbox");
-        el_required.setAttribute("onclick", "set_required('"+i+"_required')");
+        el_required.setAttribute("onclick", "set_required('"+i+"_required', '"+i+"_1_required')");
 	if(w_required=="yes")
 		el_required.setAttribute("checked", "checked");
 			
@@ -7064,6 +7219,11 @@ function type_password(i, w_field_label, w_field_label_size, w_field_label_pos, 
 	edit_main_td7.appendChild(el_unique_label);
 	edit_main_td7_1.appendChild(el_unique);
 
+	edit_main_td9.appendChild(el_password_confirm_label);
+	edit_main_td9_1.appendChild(el_password_confirm);
+	
+	edit_main_td10.appendChild(el_verification_label_label);
+	edit_main_td10_1.appendChild(el_verification_label_textarea);
 
 	edit_main_td6.appendChild(el_attr_label);
 	edit_main_td6.appendChild(el_attr_add);
@@ -7087,8 +7247,15 @@ function type_password(i, w_field_label, w_field_label_size, w_field_label_pos, 
 	edit_main_tr6.appendChild(edit_main_td6);
 	edit_main_tr7.appendChild(edit_main_td7);
 	edit_main_tr7.appendChild(edit_main_td7_1);
+	edit_main_tr9.appendChild(edit_main_td9);
+	edit_main_tr9.appendChild(edit_main_td9_1);
+	edit_main_tr10.appendChild(edit_main_td10);
+	edit_main_tr10.appendChild(edit_main_td10_1);
+
 	edit_main_table.appendChild(edit_main_tr1);
 	edit_main_table.appendChild(edit_main_tr8);
+	edit_main_table.appendChild(edit_main_tr9);
+	edit_main_table.appendChild(edit_main_tr10);
 	edit_main_table.appendChild(edit_main_tr2);
 	edit_main_table.appendChild(edit_main_tr3);
 	edit_main_table.appendChild(edit_main_tr4);
@@ -7099,7 +7266,7 @@ function type_password(i, w_field_label, w_field_label_size, w_field_label_pos, 
 	
 	t.appendChild(edit_div);
 	add_id_and_name(i, 'type_text');
-
+	set_fieldtype('type_password');
 //show table
 
 	element='input';	type='password'; 
@@ -7125,6 +7292,61 @@ function type_password(i, w_field_label, w_field_label_size, w_field_label_pos, 
 			adding.setAttribute("id", i+"_elementform_id_temp");
 			adding.setAttribute("name", i+"_elementform_id_temp");
 			adding.style.cssText = "width:"+w_size+"px;";
+		
+		
+	/////////////////////////     confirm password       ///////////////////////////////
+	
+	var adding_verification= document.createElement("input");
+		adding_verification.setAttribute("type", "hidden");
+		adding_verification.setAttribute("value", w_verification);
+		adding_verification.setAttribute("name", i+"_verification_id_temp");
+		adding_verification.setAttribute("id", i+"_verification_id_temp");
+	
+	var adding_verification_input = document.createElement(element);
+        adding_verification_input.setAttribute("type", type);
+	
+	
+		adding_verification_input.style.cssText = "width:"+w_size+"px;";
+		adding_verification_input.setAttribute("id", i+"_1_elementform_id_temp");
+		adding_verification_input.setAttribute("name", i+"_1_elementform_id_temp");
+		
+    var display_label_div_verification = (w_verification =="no" ? "none" : "table-cell");
+    var div_label_verification = document.createElement('div');
+		div_label_verification.setAttribute("align", 'left');
+		div_label_verification.style.display=display_label_div_verification;
+		div_label_verification.style.width=w_field_label_size+"px";
+		div_label_verification.setAttribute("id", i+"_1_label_sectionform_id_temp");
+
+
+	var display_element_verification = (w_verification =="no" ? "none" : "table-cell");	
+	var div_element_verification = document.createElement("div");
+		div_element_verification.setAttribute("align", "left");
+		div_element_verification.style.display = display_element_verification;
+		div_element_verification.setAttribute("id", i+"_1_element_sectionform_id_temp");
+
+
+	var label_verification = document.createElement('span');
+		label_verification.setAttribute("id", i+"_1_element_labelform_id_temp");
+		label_verification.innerHTML = w_verification_label;
+		label_verification.setAttribute("class", "label");
+		label_verification.style.verticalAlign="top";
+
+	var required_confirm = document.createElement('span');
+		required_confirm.setAttribute("id", i+"_1_required_elementform_id_temp");
+		required_confirm.innerHTML = "";
+		required_confirm.setAttribute("class", "required");
+		required_confirm.style.verticalAlign="top";
+	if(w_required=="yes")
+		required_confirm.innerHTML = " *";	
+			
+
+	div_label_verification.appendChild(label_verification);
+	div_label_verification.appendChild(required_confirm);	
+		
+	
+		
+	///////////////////////////////// END  Confirm Password///////////////////////////////////////////		
+		
 		
 			
      	var div = document.createElement('div');
@@ -7158,16 +7380,22 @@ function type_password(i, w_field_label, w_field_label_size, w_field_label_pos, 
 	if(w_required=="yes")
 			required.innerHTML = " *";
       	var main_td  = document.getElementById('show_table');
-	
+		
+	  var br5 = document.createElement('br'); 
       
       	div_label.appendChild(label);
       	div_label.appendChild(required);
       	div_element.appendChild(adding_type);
       	div_element.appendChild(adding_required);
        	div_element.appendChild(adding_unique);
+		div_element.appendChild(adding_verification);
      	div_element.appendChild(adding);
       	div_field.appendChild(div_label);
       	div_field.appendChild(div_element);
+		div_element_verification.appendChild(adding_verification_input);
+      	div_field.appendChild(br5);
+      	div_field.appendChild(div_label_verification);
+      	div_field.appendChild(div_element_verification);
 		
       	div.appendChild(div_field);
       	main_td.appendChild(div);
@@ -7494,7 +7722,7 @@ function type_textarea(i, w_field_label, w_field_label_size, w_field_label_pos, 
 	
 	t.appendChild(edit_div);
 	add_id_and_name(i, 'type_text');
-
+	set_fieldtype('type_textarea');
 //show table
 
 	element='textarea';
@@ -7917,7 +8145,7 @@ function type_wdeditor(i, w_field_label,  w_field_label_size, w_field_label_pos,
 	
 	t.appendChild(edit_div);
 	add_id_and_name(i, 'type_text');
-
+	set_fieldtype('type_wdeditor');
 //show table
 
 	element='editor';
@@ -8338,7 +8566,7 @@ function type_phone(i, w_field_label, w_field_label_size, w_field_label_pos, w_s
 	
 	t.appendChild(edit_div);
 	add_id_and_name(i, 'type_name');
-
+	set_fieldtype('type_phone');
 //show table
 
 	var adding_type = document.createElement("input");
@@ -9037,6 +9265,7 @@ else
 	
 	t.appendChild(edit_div);
 	add_id_and_name(i, 'type_name');
+	set_fieldtype('type_name');
 //show table
 
 	var adding_type = document.createElement("input");
@@ -9963,6 +10192,7 @@ function type_address(i, w_field_label, w_field_label_size, w_field_label_pos, w
 	
 	t.appendChild(edit_div);
 	add_id_and_name(i, 'type_address');
+	set_fieldtype('type_address');
 
 	var adding_type = document.createElement("input");
 		adding_type.setAttribute("type", "hidden");
@@ -10298,7 +10528,7 @@ function set_autofill(element){
 	}
 }
 
-function type_submitter_mail(i, w_field_label, w_field_label_size, w_field_label_pos, w_size, w_first_val, w_title, w_required, w_unique, w_class, w_attr_name, w_attr_value, w_autofill){
+function type_submitter_mail(i, w_field_label, w_field_label_size, w_field_label_pos, w_hide_label, w_size, w_first_val, w_title, w_required, w_unique,  w_class, w_verification, w_verification_label, w_verification_placeholder, w_attr_name, w_attr_value, w_autofill){
     document.getElementById("element_type").value="type_submitter_mail";
 
 	delete_last_child();
@@ -10321,7 +10551,19 @@ function type_submitter_mail(i, w_field_label, w_field_label_size, w_field_label
 	var edit_main_tr9  = document.createElement('tr');
 	var edit_main_tr10  = document.createElement('tr');
 	var edit_main_tr11  = document.createElement('tr');
-      			
+	var edit_main_tr12  = document.createElement('tr');
+	var display_confirm = w_verification == "yes" ? "table-row" : "none";
+	var edit_main_tr13  = document.createElement('tr');
+		edit_main_tr13.setAttribute("id", "confirm_validation_label");
+		edit_main_tr13.style.display=display_confirm;
+		
+		
+		
+	var edit_main_tr14  = document.createElement('tr');
+		edit_main_tr14.setAttribute("id", "confirm_validation_empty");
+		edit_main_tr14.style.display=display_confirm;
+		
+    var edit_main_tr_hide_label = document.createElement('tr');		
 	var edit_main_td1 = document.createElement('td');
 	var edit_main_td1_1 = document.createElement('td');
 	var edit_main_td2 = document.createElement('td');
@@ -10344,7 +10586,16 @@ function type_submitter_mail(i, w_field_label, w_field_label_size, w_field_label
 	var edit_main_td10_1 = document.createElement('td');
 	var edit_main_td11 = document.createElement('td');
 	var edit_main_td11_1 = document.createElement('td');
-		  
+	var edit_main_td12 = document.createElement('td');
+	var edit_main_td12_1 = document.createElement('td');
+	var edit_main_td13 = document.createElement('td');
+	var edit_main_td13_1 = document.createElement('td');
+	var edit_main_td14 = document.createElement('td');
+	var edit_main_td14_1 = document.createElement('td');
+	
+	
+	var edit_main_td_hide_label_1 = document.createElement('td');
+	var edit_main_td_hide_label_2 = document.createElement('td');	  
 	var el_label_label = document.createElement('label');
 		el_label_label.setAttribute("class", "fm-field-label");
 		el_label_label.setAttribute("for", "edit_for_label");
@@ -10356,6 +10607,31 @@ function type_submitter_mail(i, w_field_label, w_field_label_size, w_field_label
 		el_label_textarea.setAttribute("onKeyUp", "change_label('"+i+"_element_labelform_id_temp', this.value)");
 		el_label_textarea.innerHTML = w_field_label;
 	
+	var el_verification_label = document.createElement('label');
+		el_verification_label.setAttribute("class", "fm-field-label");
+		el_verification_label.setAttribute("for", "el_verification_mail");
+		el_verification_label.innerHTML = "Confirmation E-mail"
+
+	var el_verification = document.createElement('input');
+		el_verification.setAttribute("id", "el_verification_mail");
+		el_verification.setAttribute("type", "checkbox");
+		el_verification.setAttribute("onclick", "verification_mail('"+i+"')");
+	if(w_verification=="yes")
+		el_verification.setAttribute("checked", "checked");
+	
+	
+	var el_verification_label_label = document.createElement('label');
+		el_verification_label_label.setAttribute("class", "fm-field-label");
+		el_verification_label_label.setAttribute("for", "edit_for_label");
+		el_verification_label_label.innerHTML = "Field label confirmation";
+	
+	var el_verification_label_textarea = document.createElement('textarea');
+		el_verification_label_textarea.setAttribute("id", "edit_for_label");
+		el_verification_label_textarea.setAttribute("rows", "4");
+		el_verification_label_textarea.setAttribute("onKeyUp", "change_label('"+i+"_element_labelform_id_temp', this.value, '"+i+"_1_element_labelform_id_temp')");
+		el_verification_label_textarea.innerHTML = w_verification_label;
+	
+
 	var el_label_size_label = document.createElement('label');
 		el_label_size_label.setAttribute("class", "fm-field-label");
 	    el_label_size_label.setAttribute("for", "edit_for_label_size");
@@ -10367,7 +10643,7 @@ function type_submitter_mail(i, w_field_label, w_field_label_size, w_field_label
 	    el_label_size.setAttribute("value", w_field_label_size);
 		
 		el_label_size.setAttribute("onKeyPress", "return check_isnum(event)");
-        el_label_size.setAttribute("onKeyUp", "change_w_style('"+i+"_label_sectionform_id_temp', this.value)");
+        el_label_size.setAttribute("onKeyUp", "change_w_style('"+i+"_label_sectionform_id_temp', this.value, '"+i+"_1_label_sectionform_id_temp')");
 	
 	var el_label_position_label = document.createElement('label');
 		el_label_position_label.setAttribute("class", "fm-field-label");
@@ -10398,6 +10674,20 @@ function type_submitter_mail(i, w_field_label, w_field_label_size, w_field_label
 	else
 		el_label_position1.setAttribute("checked", "checked");
 
+	var el_hide_label_label = document.createElement('label');
+		el_hide_label_label.setAttribute("class", "fm-field-label");
+		el_hide_label_label.setAttribute("for", "el_hide_label");
+		el_hide_label_label.innerHTML = "Hide label";
+
+	var el_hide_label = document.createElement('input');
+		el_hide_label.setAttribute("id", "el_hide_label");
+		el_hide_label.setAttribute("type", "checkbox");
+		el_hide_label.setAttribute("onclick", "hide_label('"+i+"')");
+	if(w_hide_label=="yes")
+		el_hide_label.setAttribute("checked", "checked");
+		
+		
+		
 	var el_size_label = document.createElement('label');
 		el_size_label.setAttribute("class", "fm-field-label");
 		el_size_label.setAttribute("for", "edit_for_input_size");
@@ -10409,19 +10699,35 @@ function type_submitter_mail(i, w_field_label, w_field_label_size, w_field_label
 		   
 			
 			el_size.setAttribute("onKeyPress", "return check_isnum(event)");
-            el_size.setAttribute("onKeyUp", "change_w_style('"+i+"_elementform_id_temp', this.value)");
+            el_size.setAttribute("onKeyUp", "change_w_style('"+i+"_elementform_id_temp', this.value, '"+i+"_1_elementform_id_temp')");
 
 	var el_first_value_label = document.createElement('label');
 		el_first_value_label.setAttribute("class", "fm-field-label");
 	        el_first_value_label.setAttribute("for", "el_first_value_input");
 		el_first_value_label.innerHTML = "Value if empty";
 	
+
 	var el_first_value_input = document.createElement('input');
-                el_first_value_input.setAttribute("id", "el_first_value_input");
-                el_first_value_input.setAttribute("type", "text");
-                el_first_value_input.setAttribute("value", w_title);
-                el_first_value_input.setAttribute("onKeyUp", "change_input_value(this.value,'"+i+"_elementform_id_temp')");
-				
+		el_first_value_input.setAttribute("id", "el_first_value_input");
+		el_first_value_input.setAttribute("type", "text");
+		el_first_value_input.setAttribute("value", w_title);
+		el_first_value_input.setAttribute("onKeyUp", "change_input_value(this.value,'"+i+"_elementform_id_temp')");
+	
+	var el_first_value_verification_label = document.createElement('label');
+		el_first_value_verification_label.setAttribute("class", "fm-field-label");
+	    el_first_value_verification_label.setAttribute("for", "el_first_value_verification_input");
+		el_first_value_verification_label.innerHTML = "Value if empty confirmation";
+	
+
+	var el_first_value_verification_input = document.createElement('input');
+        el_first_value_verification_input.setAttribute("id", "el_first_value_verification_input");
+		el_first_value_verification_input.setAttribute("type", "text");
+		el_first_value_verification_input.setAttribute("value", w_verification_placeholder);
+		el_first_value_verification_input.setAttribute("onKeyUp", "change_input_value(this.value,'"+i+"_1_elementform_id_temp')");
+
+	
+
+		
 	var el_style_label = document.createElement('label');
 		el_style_label.setAttribute("class", "fm-field-label");
 	        el_style_label.setAttribute("for", "el_style_textarea");
@@ -10443,7 +10749,7 @@ function type_submitter_mail(i, w_field_label, w_field_label_size, w_field_label
 	var el_required = document.createElement('input');
 		el_required.setAttribute("id", "el_required");
 		el_required.setAttribute("type", "checkbox");
-		el_required.setAttribute("onclick", "set_required('"+i+"_required')");
+		el_required.setAttribute("onclick", "set_required('"+i+"_required', '"+i+"_1_required')");
 		if(w_required=="yes")
 			el_required.setAttribute("checked", "checked");
 
@@ -10595,12 +10901,21 @@ function type_submitter_mail(i, w_field_label, w_field_label_size, w_field_label
 	edit_main_td11.appendChild(el_autofill_label);
 	edit_main_td11_1.appendChild(el_autofill);
 	
+	edit_main_td12.appendChild(el_verification_label);
+	edit_main_td12_1.appendChild(el_verification);
+	
+	edit_main_td13.appendChild(el_verification_label_label);
+	edit_main_td13_1.appendChild(el_verification_label_textarea);
+	edit_main_td14.appendChild(el_first_value_verification_label);
+	edit_main_td14_1.appendChild(el_first_value_verification_input);
+	
 	edit_main_td8.appendChild(el_attr_label);
 	edit_main_td8.appendChild(el_attr_add);
 	edit_main_td8.appendChild(br4);
 	edit_main_td8.appendChild(el_attr_table);
 	edit_main_td8.setAttribute("colspan", "2");
-	
+	edit_main_td_hide_label_1.appendChild(el_hide_label_label);
+	edit_main_td_hide_label_2.appendChild(el_hide_label);
 	edit_main_tr1.appendChild(edit_main_td1);
 	edit_main_tr1.appendChild(edit_main_td1_1);
 	
@@ -10621,13 +10936,28 @@ function type_submitter_mail(i, w_field_label, w_field_label_size, w_field_label
 	edit_main_tr9.appendChild(edit_main_td9_1);
 	edit_main_tr11.appendChild(edit_main_td11);
 	edit_main_tr11.appendChild(edit_main_td11_1);
+	edit_main_tr12.appendChild(edit_main_td12);
+	edit_main_tr12.appendChild(edit_main_td12_1);
+	edit_main_tr13.appendChild(edit_main_td13);
+	edit_main_tr13.appendChild(edit_main_td13_1);
+	edit_main_tr14.appendChild(edit_main_td14);
+	edit_main_tr14.appendChild(edit_main_td14_1);
+	
+	
+	edit_main_tr_hide_label.appendChild(edit_main_td_hide_label_1);
+	edit_main_tr_hide_label.appendChild(edit_main_td_hide_label_2);	
 	edit_main_tr8.appendChild(edit_main_td8);
 	edit_main_tr8.appendChild(edit_main_td8_1);
 	edit_main_table.appendChild(edit_main_tr1);
 	edit_main_table.appendChild(edit_main_tr10);
+	edit_main_table.appendChild(edit_main_tr12);
+	edit_main_table.appendChild(edit_main_tr13);
+	
 	edit_main_table.appendChild(edit_main_tr2);
+	//edit_main_table.appendChild(edit_main_tr_hide_label);
 	edit_main_table.appendChild(edit_main_tr3);
 	edit_main_table.appendChild(edit_main_tr4);
+	edit_main_table.appendChild(edit_main_tr14);
 	edit_main_table.appendChild(edit_main_tr5);
 	edit_main_table.appendChild(edit_main_tr7);
 	edit_main_table.appendChild(edit_main_tr9);
@@ -10637,7 +10967,7 @@ function type_submitter_mail(i, w_field_label, w_field_label_size, w_field_label
 	
 	t.appendChild(edit_div);
 	add_id_and_name(i, 'type_text');
-	
+	set_fieldtype('type_submitter_mail');
 //show table
 
 	element='input';	type='text'; 
@@ -10658,13 +10988,34 @@ function type_submitter_mail(i, w_field_label, w_field_label_size, w_field_label
             adding_required.setAttribute("value", w_required);
             adding_required.setAttribute("name", i+"_requiredform_id_temp");
             adding_required.setAttribute("id", i+"_requiredform_id_temp");
-	    
+	
+	var adding_hide_label= document.createElement("input");
+		adding_hide_label.setAttribute("type", "hidden");
+		adding_hide_label.setAttribute("value", w_hide_label);
+		adding_hide_label.setAttribute("name", i+"_hide_labelform_id_temp");
+		adding_hide_label.setAttribute("id", i+"_hide_labelform_id_temp");
+
+	 
 	var adding_unique= document.createElement("input");
             adding_unique.setAttribute("type", "hidden");
             adding_unique.setAttribute("value", w_unique);
             adding_unique.setAttribute("name", i+"_uniqueform_id_temp");
             adding_unique.setAttribute("id", i+"_uniqueform_id_temp");
-			
+	
+	var adding_verification= document.createElement("input");
+		adding_verification.setAttribute("type", "hidden");
+		adding_verification.setAttribute("value", w_verification);
+		adding_verification.setAttribute("name", i+"_verification_id_temp");
+		adding_verification.setAttribute("id", i+"_verification_id_temp");
+		
+	var adding_verification= document.createElement("input");
+		adding_verification.setAttribute("type", "hidden");
+		adding_verification.setAttribute("value", w_verification);
+		adding_verification.setAttribute("name", i+"_verification_id_temp");
+		adding_verification.setAttribute("id", i+"_verification_id_temp");
+
+
+	
 	var adding = document.createElement(element);
             adding.setAttribute("type", type);
 		
@@ -10688,29 +11039,65 @@ function type_submitter_mail(i, w_field_label, w_field_label_size, w_field_label
 			adding.setAttribute("onBlur", "return_value('"+i+"_elementform_id_temp')");
 			adding.setAttribute("onChange", "change_value('"+i+"_elementform_id_temp')");
 			
+	var adding_verification_input = document.createElement(element);
+        adding_verification_input.setAttribute("type", type);
 
+			adding_verification_input.style.cssText = "width:"+w_size+"px;";
+			adding_verification_input.setAttribute("class", "input_deactive");
+		
+		
+			adding_verification_input.setAttribute("id", i+"_1_elementform_id_temp");
+			adding_verification_input.setAttribute("name", i+"_1_elementform_id_temp");
+			adding_verification_input.setAttribute("value", w_verification_placeholder);
+			adding_verification_input.setAttribute("title", w_verification_placeholder);
+			
+			adding_verification_input.setAttribute("onFocus", "delete_value('"+i+"_1_elementform_id_temp')");
+			adding_verification_input.setAttribute("onBlur", "return_value('"+i+"_1_elementform_id_temp')");
+			adding_verification_input.setAttribute("onChange", "change_value('"+i+"_1_elementform_id_temp')");
+	
+	
+	
+	
+	
      	var div = document.createElement('div');
       	    div.setAttribute("id", "main_div");
 					
       
       	var div_field = document.createElement('div');
            	div_field.setAttribute("id", i+"_elemet_tableform_id_temp");
-						
+			
+		var display_label_div = (w_hide_label == "yes" ? "none" : "table-cell");
       	var div_label = document.createElement('div');
          	div_label.setAttribute("align", 'left');
-         	div_label.style.display="table-cell";
+         	div_label.style.display=display_label_div;
 			div_label.style.width=w_field_label_size+"px";
            	div_label.setAttribute("id", i+"_label_sectionform_id_temp");
-			
+		
+		var display_label_div_verification = ((w_hide_label == "yes" || w_verification =="no") ? "none" : "table-cell");
+      	var div_label_verification = document.createElement('div');
+         	div_label_verification.setAttribute("align", 'left');
+         	div_label_verification.style.display=display_label_div_verification;
+			div_label_verification.style.width=w_field_label_size+"px";
+           	div_label_verification.setAttribute("id", i+"_1_label_sectionform_id_temp");
+
+		
       	var div_element = document.createElement('div');
          	div_element.setAttribute("align", 'left');
           	div_element.style.display="table-cell";
           	div_element.setAttribute("id", i+"_element_sectionform_id_temp");
 
+		var display_element_verification = (w_verification =="no" ? "none" : "table-cell");	
+		var div_element_verification = document.createElement("div");
+         	div_element_verification.setAttribute("align", "left");
+          	div_element_verification.style.display = display_element_verification;
+          	div_element_verification.setAttribute("id", i+"_1_element_sectionform_id_temp");	
+			
+			
       	var br1 = document.createElement('br');
       	var br2 = document.createElement('br');
      	var br3 = document.createElement('br');
       	var br4 = document.createElement('br');
+      	var br5 = document.createElement('br');
       
 
 	    
@@ -10720,24 +11107,51 @@ function type_submitter_mail(i, w_field_label, w_field_label_size, w_field_label
 			label.setAttribute("class", "label");
 			label.style.verticalAlign="top";
 	    
+		
+		var label_verification = document.createElement('span');
+			label_verification.setAttribute("id", i+"_1_element_labelform_id_temp");
+			label_verification.innerHTML = w_verification_label;
+			label_verification.setAttribute("class", "label");
+			label_verification.style.verticalAlign="top";
+		
+		
       	var required = document.createElement('span');
 			required.setAttribute("id", i+"_required_elementform_id_temp");
 			required.innerHTML = "";
 			required.setAttribute("class", "required");
 			required.style.verticalAlign="top";
-	if(w_required=="yes")
+		if(w_required=="yes")
 			required.innerHTML = " *";
+			
+		var required_confirm = document.createElement('span');
+			required_confirm.setAttribute("id", i+"_1_required_elementform_id_temp");
+			required_confirm.innerHTML = "";
+			required_confirm.setAttribute("class", "required");
+			required_confirm.style.verticalAlign="top";
+		if(w_required=="yes")
+			required_confirm.innerHTML = " *";	
+			
       	var main_td  = document.getElementById('show_table');
       
       	div_label.appendChild(label);
       	div_label.appendChild(required);
+		
+		div_label_verification.appendChild(label_verification);
+		div_label_verification.appendChild(required_confirm);
+		
       	div_element.appendChild(adding_type);
       	div_element.appendChild(adding_required);
+		div_element.appendChild(adding_hide_label);	
       	div_element.appendChild(adding_unique);
+      	div_element.appendChild(adding_verification);
       	div_element.appendChild(adding_autofill);
       	div_element.appendChild(adding);
+      	div_element_verification.appendChild(adding_verification_input);
       	div_field.appendChild(div_label);
       	div_field.appendChild(div_element);
+      	div_field.appendChild(br5);
+      	div_field.appendChild(div_label_verification);
+      	div_field.appendChild(div_element_verification);
       	
       
       	div.appendChild(div_field);
@@ -11420,6 +11834,7 @@ function type_checkbox(i, w_field_label, w_field_label_size, w_field_label_pos, 
 
 	refresh_rowcol(i, 'checkbox');
 	add_id_and_name(i, 'type_checkbox');
+	set_fieldtype('type_checkbox');
 	if(aaa)
 		show_other_input(i);
 	
@@ -12120,6 +12535,7 @@ function type_radio(i, w_field_label, w_field_label_size, w_field_label_pos, w_f
 
 	refresh_rowcol(i, 'radio');
 	add_id_and_name(i, 'type_radio');
+	set_fieldtype('type_radio');
 	if(aaa)
 		show_other_input(i);
 	
@@ -12468,6 +12884,7 @@ function type_time(i, w_field_label, w_field_label_size, w_field_label_pos, w_ti
 	
 	t.appendChild(edit_div);
 	add_id_and_name(i, 'type_time');
+	set_fieldtype('type_time');
 	
 //show table
 	var adding_type = document.createElement("input");
@@ -13884,6 +14301,7 @@ var el_format_textarea = document.createElement('input');
 	
 	t.appendChild(edit_div);
 	add_id_and_name(i, 'type_text');
+	set_fieldtype('type_date_new');
 	
 	var adding_type = document.createElement("input");
 		adding_type.setAttribute("type", "hidden");
@@ -15052,6 +15470,7 @@ var el_format_textarea = document.createElement('input');
 	
 	t.appendChild(edit_div);
 	add_id_and_name(i, 'type_range');
+	set_fieldtype('type_date_range');
 	
 	var adding_type = document.createElement("input");
 		adding_type.setAttribute("type", "hidden");
@@ -16346,7 +16765,8 @@ function type_date_fields(i, w_field_label, w_field_label_size, w_field_label_po
 	
 	t.appendChild(edit_div);
 	add_id_and_name(i, 'type_date_fields');
-
+	set_fieldtype('type_date_fields');
+	
 	var adding_type = document.createElement("input");
 		adding_type.setAttribute("type", "hidden");
 		adding_type.setAttribute("value", "type_date_fields");
@@ -17039,7 +17459,7 @@ function type_own_select(i, w_field_label, w_field_label_size, w_field_label_pos
 	
 	t.appendChild(edit_div);
 	add_id_and_name(i, 'type_text');
-	
+	set_fieldtype('type_own_select');
 //show table
 	var adding_type = document.createElement("input");
             adding_type.setAttribute("type", "hidden");
@@ -17667,7 +18087,8 @@ function type_star_rating(i, w_field_label, w_field_label_size, w_field_label_po
 	edit_div.appendChild(edit_main_table);
 	
 	t.appendChild(edit_div);
-
+	set_fieldtype('type_star_rating');
+	
 	var adding_type = document.createElement("input");
 		adding_type.setAttribute("type", "hidden");
 		adding_type.setAttribute("value", "type_star_rating");
@@ -18084,7 +18505,8 @@ edit_main_td2.appendChild(el_label_position_label);
 	edit_div.appendChild(edit_main_table);
 	
 	t.appendChild(edit_div);
-
+	set_fieldtype('type_scale_rating');
+	
 	var adding_type = document.createElement("input");
 		adding_type.setAttribute("type", "hidden");
 		adding_type.setAttribute("value", "type_scale_rating");
@@ -18644,7 +19066,8 @@ edit_main_td2.appendChild(el_label_position_label);
 	
 	t.appendChild(edit_div);
 	add_id_and_name(i, 'type_spinner');
-
+	set_fieldtype('type_spinner');
+	
 	var adding_type = document.createElement("input");
 		adding_type.setAttribute("type", "hidden");
 		adding_type.setAttribute("value", "type_spinner");
@@ -19083,7 +19506,8 @@ edit_main_td2.appendChild(el_label_position_label);
 	
 	t.appendChild(edit_div);
 	add_id_and_name(i, 'type_slider');
-
+	set_fieldtype('type_slider');
+	
 	var adding_type = document.createElement("input");
 		adding_type.setAttribute("type", "hidden");
 		adding_type.setAttribute("value", "type_slider");
@@ -19622,6 +20046,7 @@ edit_main_td2.appendChild(el_label_position_label);
 	
 	t.appendChild(edit_div);
 	add_id_and_name(i, 'type_range');
+	set_fieldtype('type_range');
 	
 	var adding_type = document.createElement("input");
 		adding_type.setAttribute("type", "hidden");
@@ -20229,6 +20654,7 @@ function type_grading(i, w_field_label, w_field_label_size, w_field_label_pos, w
 	refresh_attr(i, 'type_grading');
 	refresh_grading_items(i);
 	add_id_and_name(i, 'type_grading');
+	set_fieldtype('type_grading');
 }
 
 function change_total(value,id)
@@ -20674,8 +21100,10 @@ function type_matrix(i, w_field_label, w_field_label_size, w_field_label_pos, w_
 	
 	edit_div.appendChild(edit_main_table);
 	t.appendChild(edit_div);
+	set_fieldtype('type_matrix');
 	element='input';	
 	type='matrix'; 
+	
 	var adding_type = document.createElement("input");
             adding_type.setAttribute("type", "hidden");
             adding_type.setAttribute("value", "type_matrix");
@@ -21069,7 +21497,7 @@ function type_country(i, w_field_label, w_field_label_size, w_countries, w_field
 	
 	t.appendChild(edit_div);
 	add_id_and_name(i, 'type_text');
-	
+	set_fieldtype('type_country');
 //show table
 	var adding_type = document.createElement("input");
             adding_type.setAttribute("type", "hidden");
@@ -21442,7 +21870,7 @@ function type_recaptcha(i,w_field_label, w_field_label_size, w_field_label_pos, 
 	
 	t.appendChild(edit_div);
 	add_id_and_name(i, 'type_text');
-
+	set_fieldtype('type_recaptcha');
 	element='img';	type='captcha'; 
 	var adding_type = document.createElement("input");
 		adding_type.setAttribute("type", "hidden");
@@ -21773,7 +22201,8 @@ function type_captcha(i,w_field_label, w_field_label_size, w_field_label_pos, w_
 	
 	t.appendChild(edit_div);
 	add_id_and_name(i, 'type_captcha');
-
+	set_fieldtype('type_captcha');
+	
 	element='img';	type='captcha'; 
 	var adding_type = document.createElement("input");
 		adding_type.setAttribute("type", "hidden");
@@ -22172,7 +22601,8 @@ function type_arithmetic_captcha(i,w_field_label, w_field_label_size, w_field_la
 	
 	t.appendChild(edit_div);
 	add_id_and_name(i, 'type_arithmetic_captcha');
-
+	set_fieldtype('type_arithmetic_captcha');
+	
 	var adding_type = document.createElement("input");
 		adding_type.setAttribute("type", "hidden");
 		adding_type.setAttribute("value", "type_arithmetic_captcha");
@@ -22779,7 +23209,7 @@ function type_mark_map(i, w_field_label, w_field_label_size, w_field_label_pos, 
 	edit_div.appendChild(edit_main_table);
 	
 	t.appendChild(edit_div);
-	
+	set_fieldtype('type_mark_map');
 	element='div';
 	var adding_type = document.createElement("input");
 		adding_type.setAttribute("type", "hidden");
@@ -24595,7 +25025,7 @@ function go_to_type_password(new_id)
 {
  	w_attr_name=[];
  	w_attr_value=[];
-	type_password(new_id,'Password:', '100', 'left', '200', 'no', 'no', 'wdform_input',w_attr_name, w_attr_value);
+	type_password(new_id,'Password:', '100', 'left', '200', 'no', 'no', 'wdform_input', 'no', 'Password confirmation:',w_attr_name, w_attr_value);
 }
 
 function go_to_type_textarea(new_id)
@@ -24648,7 +25078,7 @@ function go_to_type_submitter_mail(new_id)
 {
  	w_attr_name=[];
  	w_attr_value=[];
-	type_submitter_mail(new_id,'E-mail:', '100', 'left', '200', '', '', 'no', '', w_attr_name, w_attr_value, 'no');
+	type_submitter_mail(new_id,'E-mail:', '100', 'left', 'no', '200', '', '', 'no', 'no', '', 'no', 'E-mail confirmation:', '', w_attr_name, w_attr_value, 'no');
 }
 
 function go_to_type_time(new_id)
@@ -26777,6 +27207,14 @@ function add(key, after_edit, wdid)
 						wdform_field.appendChild(add1);
 						wdform_field.appendChild(add2);
 	
+						if(type=="type_submitter_mail" || type=="type_password"){
+							var br_submitter_mail = document.createElement('br');
+							var add1_1 = document.getElementById(i+'_1_label_sectionform_id_temp');
+							var add2_2 = document.getElementById(i+'_1_element_sectionform_id_temp');
+							wdform_field.appendChild(br_submitter_mail);
+							wdform_field.appendChild(add1_1);
+							wdform_field.appendChild(add2_2);
+						}
 	
 				j=2;
 	
@@ -26970,6 +27408,16 @@ function add(key, after_edit, wdid)
 						
 						wdform_field.appendChild(add1);
 						wdform_field.appendChild(add2);
+	
+						if(type=="type_submitter_mail" || type=="type_password"){
+							var br_submitter_mail = document.createElement('br');
+							var add1_1 = document.getElementById(i+'_1_label_sectionform_id_temp');
+							var add2_2 = document.getElementById(i+'_1_element_sectionform_id_temp');
+							wdform_field.appendChild(br_submitter_mail);
+							wdform_field.appendChild(add1_1);
+							wdform_field.appendChild(add2_2);
+						}
+	
 	
 			wdform_arrows.appendChild(td_X);
 			wdform_arrows.appendChild(td_LEFT);
@@ -27194,10 +27642,15 @@ function edit(id)
 			}
 			case 'type_password':
 			{
+				w_verification = document.getElementById(id+"_verification_id_temp").value;
+				if(document.getElementById(id+'_1_element_labelform_id_temp').innerHTML)
+					w_verification_label=document.getElementById(id+'_1_element_labelform_id_temp').innerHTML;
+				else
+					w_verification_label=" ";
 				atrs=return_attributes(id+'_elementform_id_temp');
 				w_attr_name=atrs[0];
 				w_attr_value=atrs[1];
-				type_password(id, w_field_label, w_field_label_size, w_field_label_pos, w_size, w_required, w_unique, w_class, w_attr_name, w_attr_value); break;
+				type_password(id, w_field_label, w_field_label_size, w_field_label_pos, w_size, w_required, w_unique, w_class, w_verification, w_verification_label, w_attr_name, w_attr_value); break;
 			}
 			case 'type_textarea':
 			{
@@ -27361,13 +27814,21 @@ function edit(id)
 
 			case 'type_submitter_mail':
 			{
+				w_hide_label=document.getElementById(id+"_hide_labelform_id_temp").value;
 				w_first_val=document.getElementById(id+"_elementform_id_temp").value;
 				w_title=document.getElementById(id+"_elementform_id_temp").title;
 				w_autofill = document.getElementById(id+"_autofillform_id_temp").value;
+				w_verification = document.getElementById(id+"_verification_id_temp").value;
+				w_verification_placeholder = document.getElementById(id+"_1_elementform_id_temp").title;
+				if(document.getElementById(id+'_1_element_labelform_id_temp').innerHTML)
+					w_verification_label=document.getElementById(id+'_1_element_labelform_id_temp').innerHTML;
+				else
+					w_verification_label=" ";
+					
 				atrs=return_attributes(id+'_elementform_id_temp');
 				w_attr_name=atrs[0];
 				w_attr_value=atrs[1];
-				type_submitter_mail(id, w_field_label, w_field_label_size, w_field_label_pos, w_size, w_first_val, w_title, w_required, w_unique, w_class, w_attr_name, w_attr_value, w_autofill); break;
+				type_submitter_mail(id, w_field_label, w_field_label_size, w_field_label_pos, w_hide_label, w_size, w_first_val, w_title, w_required, w_unique, w_class, w_verification, w_verification_label, w_verification_placeholder, w_attr_name, w_attr_value, w_autofill); break;
 			}
 			case 'type_checkbox':
 			{	
@@ -28107,10 +28568,15 @@ function duplicate(id) {
 			}
 			case 'type_password':
 			{
+				w_verification = document.getElementById(id+"_verification_id_temp").value;
+				if(document.getElementById(id+'_1_element_labelform_id_temp').innerHTML)
+					w_verification_label=document.getElementById(id+'_1_element_labelform_id_temp').innerHTML;
+				else
+					w_verification_label=" ";
 				atrs=return_attributes(id+'_elementform_id_temp');
 				w_attr_name=atrs[0];
 				w_attr_value=atrs[1];
-				type_password(gen, w_field_label, w_field_label_size, w_field_label_pos, w_size, w_required, w_unique, w_class, w_attr_name, w_attr_value);  break;
+				type_password(gen, w_field_label, w_field_label_size, w_field_label_pos, w_size, w_required, w_unique, w_class,  w_verification, w_verification_label, w_attr_name, w_attr_value);  break;
 			}
 			case 'type_textarea':
 			{
@@ -28273,13 +28739,20 @@ function duplicate(id) {
 
 			case 'type_submitter_mail':
 			{
+				w_hide_label=document.getElementById(id+"_hide_labelform_id_temp").value;
 				w_first_val=document.getElementById(id+"_elementform_id_temp").value;
 				w_title=document.getElementById(id+"_elementform_id_temp").title;
 				w_autofill = document.getElementById(id+"_autofillform_id_temp").value;
+				w_verification = document.getElementById(id+"_verification_id_temp").value;
+				w_verification_placeholder = document.getElementById(id+"_1_elementform_id_temp").title;
+				if(document.getElementById(id+'_1_element_labelform_id_temp').innerHTML)
+					w_verification_label=document.getElementById(id+'_1_element_labelform_id_temp').innerHTML;
+				else
+					w_verification_label=" ";
 				atrs=return_attributes(id+'_elementform_id_temp');
 				w_attr_name=atrs[0];
 				w_attr_value=atrs[1];
-				type_submitter_mail(gen, w_field_label, w_field_label_size, w_field_label_pos, w_size, w_first_val, w_title, w_required, w_unique, w_class, w_attr_name, w_attr_value, w_autofill); break;
+				type_submitter_mail(gen, w_field_label, w_field_label_size, w_field_label_pos, w_hide_label, w_size, w_first_val, w_title, w_required, w_unique, w_class, w_verification, w_verification_label, w_verification_placeholder, w_attr_name, w_attr_value, w_autofill); break;
 			}
 			case 'type_checkbox':
 			{	
@@ -28969,6 +29442,11 @@ function gen_form_fields()
 		}
 		case 'type_password':
 		{
+			w_verification = document.getElementById(id+"_verification_id_temp").value;
+			if(document.getElementById(id+'_1_element_labelform_id_temp').innerHTML)
+				w_verification_label=document.getElementById(id+'_1_element_labelform_id_temp').innerHTML;
+			else
+				w_verification_label=" ";
 			atrs=return_attributes(id+'_elementform_id_temp');
 			w_attr_name=atrs[0];
 			w_attr_value=atrs[1];
@@ -28981,6 +29459,8 @@ function gen_form_fields()
 			form_fields+=w_required+"*:*w_required*:*";
 			form_fields+=w_unique+"*:*w_unique*:*";
 			form_fields+=w_class+"*:*w_class*:*";
+			form_fields+=w_verification+"*:*w_verification*:*";
+			form_fields+=w_verification_label+"*:*w_verification_label*:*";
 			
 			for(j=0; j<w_attr_name.length; j++)
 			{
@@ -29239,10 +29719,18 @@ function gen_form_fields()
 
 		case 'type_submitter_mail':
 		{
+			w_hide_label=document.getElementById(id+"_hide_labelform_id_temp").value;
 			w_first_val=document.getElementById(id+"_elementform_id_temp").value;
 			w_title=document.getElementById(id+"_elementform_id_temp").title;
 			w_autofill = document.getElementById(id+"_autofillform_id_temp").value;
-			
+			w_verification = document.getElementById(id+"_verification_id_temp").value;
+			w_verification_placeholder = document.getElementById(id+"_1_elementform_id_temp").title;
+			if(document.getElementById(id+'_1_element_labelform_id_temp').innerHTML)
+				w_verification_label=document.getElementById(id+'_1_element_labelform_id_temp').innerHTML;
+			else
+				w_verification_label=" ";
+	
+	
 			atrs=return_attributes(id+'_elementform_id_temp');
 			w_attr_name=atrs[0];
 			w_attr_value=atrs[1];
@@ -29250,17 +29738,22 @@ function gen_form_fields()
 				form_fields+=w_field_label+"*:*w_field_label*:*";
 				form_fields+=w_field_label_size+"*:*w_field_label_size*:*";
 				form_fields+=w_field_label_pos+"*:*w_field_label_pos*:*";
+				form_fields+=w_hide_label+"*:*w_hide_label*:*";	
 				form_fields+=w_size+"*:*w_size*:*";
 				form_fields+=w_first_val+"*:*w_first_val*:*";
 				form_fields+=w_title+"*:*w_title*:*";
 				form_fields+=w_required+"*:*w_required*:*";
 				form_fields+=w_unique+"*:*w_unique*:*";
 				form_fields+=w_class+"*:*w_class*:*";
+				form_fields+=w_verification+"*:*w_verification*:*";
+				form_fields+=w_verification_label+"*:*w_verification_label*:*";
+				form_fields+=w_verification_placeholder+"*:*w_verification_placeholder*:*";
 				form_fields+=w_autofill+"*:*w_autofill*:*";
 				for(j=0; j<w_attr_name.length; j++)
 				{
 				form_fields+=w_attr_name[j]+"="+w_attr_value[j]+"*:*w_attr_name*:*";
 				}
+				
 				
 				form_fields+="*:*new_field*:*";	
 				break;

@@ -38,6 +38,8 @@ class  FMViewSubmissions_fm {
 		$rows = ((isset($labels_parameters[5])) ? $labels_parameters[5] : NULL);
 		$group_ids = ((isset($labels_parameters[6])) ? $labels_parameters[6] : NULL);
 		$where_choices = $labels_parameters[7];	
+		$searched_ids = $labels_parameters[8] ? implode(',', $labels_parameters[8]) : '';	
+
 		$order_by = (isset($_POST['order_by']) ? esc_html(stripslashes($_POST['order_by'])) : 'group_id');
 		$asc_or_desc = ((isset($_POST['asc_or_desc']) && $_POST['asc_or_desc'] == 'asc') ? 'asc' : 'desc');
 		$style_id = $this->model->hide_or_not($lists['hide_label_list'], '@submitid@'); 
@@ -55,6 +57,7 @@ class  FMViewSubmissions_fm {
 		$n = count($rows);
 		$group_id_s = array();	
 		$group_id_s = $this->model->sort_group_ids(count($sorted_label_names),$group_ids);  
+
 		$ka_fielderov_search = (($lists['ip_search'] || $lists['startdate'] || $lists['enddate'] || $lists['username_search'] || $lists['useremail_search'] || $lists['id_search']) ? TRUE : FALSE);
 		$is_stats = false;
 		$blocked_ips = $this->model->blocked_ips();
@@ -75,54 +78,50 @@ class  FMViewSubmissions_fm {
 		?>
 		<script type="text/javascript">
 			function export_submissions(type, limit) {
-			var progressbar = jQuery( "#fm-progressbar" );
-			var progressLabel = jQuery( ".fm-progress-label" );
-		 
-			progressbar.progressbar({
-				max: <?php echo $subs_count; ?>
-			});
-			
-			var search_labels = [];
-			jQuery('td.submitid_fc a').each(function(index, value) {
-				search_labels.push(parseInt(jQuery(this).html()));
-			});
-			
-			jQuery.ajax({
-			    type: "POST",  
-				url:"<?php echo add_query_arg(array('form_id' => $form_id, 'send_header' => 0), admin_url('admin-ajax.php')); ?>&action=generete_"+type+"&limitstart="+limit+"&search_labels="+search_labels.join(','),
-				beforeSend: function() {
-					if(<?php echo $subs_count; ?> >= 1000 )
-						jQuery('.fm_modal').show();
-			    },
+				var progressbar = jQuery( "#fm-progressbar" );
+				var progressLabel = jQuery( ".fm-progress-label" );
+				progressbar.progressbar({
+					max: <?php echo $subs_count; ?>
+				});
+
+			 	jQuery.ajax({
+			    type: "POST",
+					url:"<?php echo add_query_arg(array('form_id' => $form_id, 'send_header' => 0), admin_url('admin-ajax.php')); ?>&action=generete_"+type+"&limitstart="+limit,
+					data: {search_labels : '<?php echo $searched_ids; ?>'},
+					beforeSend: function() {
+						if(<?php echo $subs_count; ?> >= 1000 )
+							jQuery('.fm_modal').show();
+		    	},
 			    success: function(data) {
-					if(limit < <?php echo $subs_count; ?>) {
-						limit += 1000;
-						export_submissions(type, limit);
-						progressbar.progressbar( "value",  limit);
-						loaded_percent = Math.round((progressbar.progressbar( "value" ) * 100)/ parseInt(<?php echo $subs_count; ?>));
-						progressLabel.text( loaded_percent + ' %');
-						progressbarValue = progressbar.find( ".fm-progress-label" );
-						if( loaded_percent >= 46 ) {
-							progressbarValue.css({
-								"color": '#fff',
-							});
-						}
-						else {
-							progressbarValue.css({
-								"color": '#444',
-							});
-						}
-					}
-					else{
-						jQuery('.fm_modal').hide();
-						progressbar.progressbar( "value",  0);
-						progressLabel.text( 'Loading ...' );
-						progressbarValue = progressbar.find( ".fm-progress-label" );
-						progressbarValue.css({
-							"color": '#444',
-						});
-						window.location = "<?php echo add_query_arg(array('form_id' => $form_id, 'send_header' => 1), admin_url('admin-ajax.php')); ?>&action=generete_"+type+"&limitstart="+limit+"&search_labels="+search_labels.join(',');
-					}
+							if(limit < <?php echo $subs_count; ?>) {
+								limit += 1000;
+								export_submissions(type, limit);
+								progressbar.progressbar( "value",  limit);
+								loaded_percent = Math.round((progressbar.progressbar( "value" ) * 100)/ parseInt(<?php echo $subs_count; ?>));
+								progressLabel.text( loaded_percent + ' %');
+								progressbarValue = progressbar.find( ".fm-progress-label" );
+								if( loaded_percent >= 46 ) {
+									progressbarValue.css({
+										"color": '#fff',
+									});
+								}
+								else {
+									progressbarValue.css({
+										"color": '#444',
+									});
+								}
+							}
+							else{
+								jQuery('.fm_modal').hide();
+								progressbar.progressbar( "value",  0);
+								progressLabel.text( 'Loading ...' );
+								progressbarValue = progressbar.find( ".fm-progress-label" );
+								progressbarValue.css({
+									"color": '#444',
+								});
+								window.location = "<?php echo add_query_arg(array('form_id' => $form_id, 'send_header' => 1), admin_url('admin-ajax.php')); ?>&action=generete_"+type+"&limitstart="+limit;
+							}
+
 			    }
 			});
 		}

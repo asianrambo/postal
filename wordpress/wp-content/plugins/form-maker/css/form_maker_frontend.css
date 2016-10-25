@@ -35,8 +35,8 @@ div[type="type_captcha"] .wdform-element-section * {
 }
 div.ui-datepicker{
  font-size:15px !important;
+ z-index : 1000 !important;;
 }
-
 .ui-datepicker {
    background: #F2F2F2 !important;
    border: 1px solid #F2F2F2 !important;

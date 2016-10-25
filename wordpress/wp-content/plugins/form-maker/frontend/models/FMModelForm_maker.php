@@ -2330,8 +2330,9 @@ class FMModelForm_maker {
 				
 				foreach($label_order_original as $key => $label_each) {
 					$type=$label_type[$key];
+					$key1 = $type == 'type_hidden' ? $label_each : $key;
 					if(strpos($row->script_mail_user, "%".$label_each."%") > -1) {
-						$new_value = $this->custom_fields_mail($type, $key, $id, $attachment_user, '');	
+						$new_value = $this->custom_fields_mail($type, $key1, $id, $attachment_user, '');	
 						$new_script = str_replace("%".$label_each."%", $new_value, $new_script);	
 					}
 					else{
@@ -2454,12 +2455,7 @@ class FMModelForm_maker {
 					$subject 	= $row->title;
 				}
 		
-				if ($row->from_name) {
-					$fromname = $row->from_name;
-				}
-				else {
-					$fromname = '';
-				}
+				$fromname = $row->from_name;
 				$attachment = array(); 
 				if ($row->mail_attachment) {
 					for ($k = 0; $k < count($all_files); $k++) {
@@ -2490,8 +2486,9 @@ class FMModelForm_maker {
 					
 				foreach($label_order_original as $key => $label_each) {							
 					$type=$label_type[$key];
+					$key1 = $type == 'type_hidden' ? $label_each : $key;
 					if(strpos($row->script_mail, "%".$label_each."%") > -1) {
-						$new_value = $this->custom_fields_mail($type, $key, $id, $attachment, '');	
+						$new_value = $this->custom_fields_mail($type, $key1, $id, $attachment, '');	
 						$new_script = str_replace("%".$label_each."%", $new_value, $new_script);	
 					}
 					else{
@@ -2527,7 +2524,12 @@ class FMModelForm_maker {
 					if (!isset($from)) {
 						$from = $row->from_mail;
 					}
-					$from = "From: '" . $fromname . "' <" . $from . ">" . "\r\n";
+					if ($fromname != '') {
+						$from = "From: '" . $fromname . "' <" . $from . ">" . "\r\n";
+					}	
+					else {
+						$from = "From: '' <" . $from . ">" . "\r\n";
+					}
 				}
 				else {
 					$from = "";
@@ -4419,7 +4421,7 @@ class FMModelForm_maker {
         }
         
         case "type_hidden": {
-          $element = isset($_POST[$element_label]) ? $_POST[$element_label] : NULL;
+          $element = isset($_POST[$key]) ? $_POST[$key] : NULL;
           if(isset($element)) {
             $new_value = $element;	
           }

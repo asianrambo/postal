@@ -3276,11 +3276,11 @@ class FMViewManage_fm {
 									for ($i = 0; $i < $fields_count - 1; $i++) {
 										?>
 										<div>
-											 <input type="radio" name="from_mail" id="from_mail<?php echo $i; ?>" value="<?php echo (strlen($fields[$i])!=1 ? substr($fields[$i], strrpos($fields[$i], '*:*new_field*:*')+15, strlen($fields[$i])) : $fields[$i]); ?>"  <?php echo ((strlen($fields[$i])!=1 ? substr($fields[$i], strrpos($fields[$i], '*:*new_field*:*')+15, strlen($fields[$i])) : $fields[$i]) == $row->from_mail ? 'checked="checked"' : '' ); ?> onclick="wdhide('mail_from_other')" />
+											 <input type="radio" name="from_mail" id="from_mail<?php echo $i; ?>" value="<?php echo (!is_numeric($fields[$i])  ? substr($fields[$i], strrpos($fields[$i], '*:*new_field*:*')+15, strlen($fields[$i])) : $fields[$i]); ?>"  <?php echo ((!is_numeric($fields[$i])  ? substr($fields[$i], strrpos($fields[$i], '*:*new_field*:*')+15, strlen($fields[$i])) : $fields[$i]) == $row->from_mail ? 'checked="checked"' : '' ); ?> onclick="wdhide('mail_from_other')" />
 											<label for="from_mail<?php echo $i; ?>"><?php echo substr($fields[$i + 1], 0, strpos($fields[$i + 1], '*:*w_field_label*:*')); ?></label>
 										</div>
 										<?php
-										if(strlen($fields[$i])!=1) {
+										if(!is_numeric($fields[$i]) ) {
 											if (substr($fields[$i], strrpos($fields[$i], '*:*new_field*:*') + 15, strlen($fields[$i])) == $row->from_mail) {
 												$is_other = FALSE;
 											}
@@ -3340,11 +3340,11 @@ class FMViewManage_fm {
 									for ($i = 0; $i < $fields_count - 1; $i++) {
 										?>
 										<div>
-											<input type="radio" name="reply_to" id="reply_to<?php echo $i; ?>" value="<?php echo (strlen($fields[$i])!=1 ? substr($fields[$i], strrpos($fields[$i], '*:*new_field*:*')+15, strlen($fields[$i])) : $fields[$i]); ?>"  <?php echo ((strlen($fields[$i])!=1 ? substr($fields[$i], strrpos($fields[$i], '*:*new_field*:*')+15, strlen($fields[$i])) : $fields[$i]) == $row->reply_to ? 'checked="checked"' : '' ); ?> onclick="wdhide('reply_to_other')" />
+											<input type="radio" name="reply_to" id="reply_to<?php echo $i; ?>" value="<?php echo (!is_numeric($fields[$i])  ? substr($fields[$i], strrpos($fields[$i], '*:*new_field*:*')+15, strlen($fields[$i])) : $fields[$i]); ?>"  <?php echo ((!is_numeric($fields[$i])  ? substr($fields[$i], strrpos($fields[$i], '*:*new_field*:*')+15, strlen($fields[$i])) : $fields[$i]) == $row->reply_to ? 'checked="checked"' : '' ); ?> onclick="wdhide('reply_to_other')" />
 											<label for="reply_to<?php echo $i; ?>"><?php echo substr($fields[$i + 1], 0, strpos($fields[$i + 1], '*:*w_field_label*:*')); ?></label>
 										</div>
 										<?php
-										if(strlen($fields[$i])!=1) {
+										if(!is_numeric($fields[$i]) ) {
 											if (substr($fields[$i], strrpos($fields[$i], '*:*new_field*:*') + 15, strlen($fields[$i])) == $row->reply_to) {
 												$is_other = FALSE;
 											}
@@ -3516,7 +3516,7 @@ class FMViewManage_fm {
 											for ($i = 0; $i < $fields_count - 1; $i++) {
 												?>
 												<div>
-													<input type="checkbox" name="send_to<?php echo $i; ?>" id="send_to<?php echo $i; ?>" value="<?php echo (strlen($fields[$i])!=1 ? substr($fields[$i], strrpos($fields[$i], '*:*new_field*:*')+15, strlen($fields[$i])) : $fields[$i]); ?>"  <?php echo (is_numeric(strpos($row->send_to, '*'.(strlen($fields[$i])!=1 ? substr($fields[$i], strrpos($fields[$i], '*:*new_field*:*')+15, strlen($fields[$i])) : $fields[$i]).'*')) ? 'checked="checked"' : '' ); ?> style="margin: 0px 5px 0px 0px;" />
+													<input type="checkbox" name="send_to<?php echo $i; ?>" id="send_to<?php echo $i; ?>" value="<?php echo (!is_numeric($fields[$i])  ? substr($fields[$i], strrpos($fields[$i], '*:*new_field*:*')+15, strlen($fields[$i])) : $fields[$i]); ?>"  <?php echo (is_numeric(strpos($row->send_to, '*'.(!is_numeric($fields[$i])  ? substr($fields[$i], strrpos($fields[$i], '*:*new_field*:*')+15, strlen($fields[$i])) : $fields[$i]).'*')) ? 'checked="checked"' : '' ); ?> style="margin: 0px 5px 0px 0px;" />
 													<label for="send_to<?php echo $i; ?>"><?php echo substr($fields[$i + 1], 0, strpos($fields[$i + 1], '*:*w_field_label*:*')); ?></label>
 												</div>
 												<?php
