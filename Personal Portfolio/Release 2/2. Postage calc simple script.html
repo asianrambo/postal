@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>package Weight Calculator</title>
+</head>
+
+<body>
+<form id="packageWeight" action="">
+<fieldset>
+	<legend>Postage Calculator</legend>
+	<p>
+		<label for="length">Your Zipcode</label>
+		<input id="length" name="length" type="number" />
+	</p>
+	<p>
+		<label for="width">Recievers Zipcode</label>
+		<input id="width" name="width" type="number" />
+	</p>
+	<p>
+		<label for="weight">Package weight in kg</label>
+		<input id="weight" name="weight" type="number" />
+	</p>
+	<p>
+		<input type="submit" value="Calculate Price" />
+		or
+		<input type="reset" value="Reset" />
+	</p>
+	<p>
+		<label for="price">Estimated postage will be :  </label>
+		$<input id="price" name="price" type="$number" readonly value='' />
+	</p>
+</fieldset>
+</form>
+<script>
+(function () {
+	function calculatepackageWeight(length, width, weight) {
+		length = parseFloat(length);
+		width = parseFloat(width);
+		weight = parseFloat(weight);
+		if (length > width){
+		return ((length - width) * weight)
+		}
+		else {
+		return ((width-length) * weight)}
+	}
+
+	var packageWeight = document.getElementById("packageWeight");
+	if (packageWeight) {
+		packageWeight.onsubmit = function () {
+			this.price.value = calculatepackageWeight(this.length.value, this.width.value, this.weight.value);
+			return false;
+		};
+	}
+}());
+</script>
+</body>
+</html>
